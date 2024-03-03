@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">VaccinApp</string>
+    <string name="register_success">You are registered successfully</string>
     <string name="app_description">Welcome to VaccinApp. Your best choice for keeping track of your vaccines!</string>
     <string name="sign_up"><u>Sign up</u></string>
     <string name="sign_in"><u>Sign in</u></string>
+    <string name="register_failed">Registration Failed</string>
 </resources>

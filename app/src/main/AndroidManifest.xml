@@ -13,6 +13,12 @@
         android:theme="@style/Base.Theme.VaccinationApp"
         tools:targetApi="31">
         <activity
+            android:name=".firebase.FireStoreClass"
+            android:exported="false" />
+        <activity
+            android:name=".firebase.User"
+            android:exported="false" />
+        <activity
             android:name=".SignUpActivity"
             android:exported="false" />
         <activity
@@ -27,7 +33,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
     </application>
 
 </manifest>
