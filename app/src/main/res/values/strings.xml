@@ -5,4 +5,11 @@
     <string name="sign_up"><u>Sign up</u></string>
     <string name="sign_in"><u>Sign in</u></string>
     <string name="register_failed">Registration Failed</string>
+    <string name="invalid_email"><u>Invalid E-mail</u></string>
+    <string name="pass_regulation"><u>Password must contain at least one Capital letter</u></string>
+    <string name="pass_not_the_same"><u>Passwords must be the same</u></string>
+    <string name="use_not_found"><u>User not found, check e-mail, password or create  an account </u></string>
+    <string name="wrong_log_in_email"><u>Invalid e-mail</u></string>
+    <string name="wrong_log_in_password"><u>Invalid password</u></string>
+
 </resources>
