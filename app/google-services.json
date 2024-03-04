@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "868289517564",
+    "project_id": "vaccinationapp-7b662",
+    "storage_bucket": "vaccinationapp-7b662.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:868289517564:android:7b0fea622df58059bac479",
+        "android_client_info": {
+          "package_name": "com.example.vaccinationapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCV90YLm2VPzqzd7L-k_lPxCHDjLxnjlDA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
