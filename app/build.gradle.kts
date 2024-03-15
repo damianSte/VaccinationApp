@@ -8,6 +8,7 @@ android {
     namespace = "com.example.vaccinationapp"
     compileSdk = 34
 
+
     defaultConfig {
         applicationId = "com.example.vaccinationapp"
         minSdk = 33
