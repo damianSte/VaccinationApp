@@ -7,7 +7,13 @@ import android.text.TextUtils
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import com.google.firebase.auth.FirebaseAuth
+import com.example.vaccinationapp.phpAdmin.DBConnection
+import com.example.vaccinationapp.phpAdmin.DBQueries
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.security.MessageDigest
 
 class SignInActivity : AppCompatActivity() {
 
@@ -30,16 +36,16 @@ class SignInActivity : AppCompatActivity() {
 
 
         goToSignInActivity()
+        logIntoApp()
 
     }
 
-    // Replace SomeActivity with actualActivity
-//    private fun breakInNoLog(){
-//        breakInButton.setOnClickListener{
-//            val intent = Intent(this, SomeActivity::class.java)
-//            startActivity(intent)
-//        }
-//  }
+
+    private fun logIntoApp(){
+        logToApp.setOnClickListener{
+            logInRegisteredUser()
+        }
+    }
 
     private fun goToSignInActivity() {
         goToSignUpButton.setOnClickListener {
@@ -69,23 +75,70 @@ class SignInActivity : AppCompatActivity() {
         }
     }
 
-    private fun logInRegisteredUser() {
-        // validating from validateLoginDetails()
-        if (validateLoginDetails()) {
-            val email = inputEmail.text.toString().trim()
-            val password = inputPassword.text.toString().trim()
+//    private fun logInRegisteredUser() {
+//        // validating from validateLoginDetails()
+//        if (validateLoginDetails()) {
+//            val email = inputEmail.text.toString().trim()
+//            val password = inputPassword.text.toString().trim()
+//
+//            // getting email and password from Firebase
+//            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+//                .addOnCompleteListener { task ->
+//                    if (task.isSuccessful) {
+//                        // Go to some Activity !!
+//                        finish()
+//                    } else {
+//                        makeToast(task.exception?.message.toString(), true)
+//                    }
+//                }
+//        }
+//    }
 
-            // getting email and password from Firebase
-            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        // Go to some Activity !!
-                        finish()
-                    } else {
-                        makeToast(task.exception?.message.toString(), true)
-                    }
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun logInRegisteredUser() {
+        val email = hashData(inputEmail.text.toString().trim())
+        val password = hashData(inputPassword.text.toString().trim())
+
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val connection = DBConnection.getConnection()
+                val dbQueries = DBQueries(connection)
+
+                val userExists = dbQueries.userExists(email, password)
+                connection.close()
+
+                if (userExists) {
+                    //openNextActivity()
+                } else {
+                    showToast("User not found")
                 }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
+    }
+
+    // Function to open the next activity testLogin replace with real class
+//    private fun openNextActivity() {
+//        val intent = Intent(this, testLogin::class.java)
+//        startActivity(intent)
+//    }
+
+    // Function to display a toast message
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun hashData(data: String): String {
+        val bytes = data.toByteArray()
+        val md = MessageDigest.getInstance("SHA-256")
+        val digest = md.digest(bytes)
+        return digest.toHexString()
+    }
+
+    fun ByteArray.toHexString(): String {
+        return joinToString("") { "%02x".format(it) }
     }
 
     private fun makeToast(toast: String, errorMessage: Boolean) {

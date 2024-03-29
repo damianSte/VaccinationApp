@@ -13,13 +13,16 @@
         android:theme="@style/Base.Theme.VaccinationApp"
         tools:targetApi="31">
         <activity
+            android:name=".VaccineControl.testLogin"
+            android:exported="false" />
+        <activity
             android:name=".phpAdmin.testActiv"
             android:exported="false" />
         <activity
             android:name=".VaccineControl.VaccineController"
             android:exported="false" />
         <activity
-            android:name=".phpAdmin.LogInDataClass"
+            android:name=".phpAdmin.SignUpDataClass"
             android:exported="false" />
         <activity
             android:name=".firebase.FireStoreClass"

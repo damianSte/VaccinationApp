@@ -12,7 +12,7 @@ object DBConnection {
         private const val USER = "sql11692905"
         private const val PASS = "Yh31wh8iun"
     init {
-        Class.forName("com.mysql.cj.jdbc.Driver")
+        Class.forName("com.mysql.jdbc.Driver")
     }
     fun getConnection(): Connection {
         try {

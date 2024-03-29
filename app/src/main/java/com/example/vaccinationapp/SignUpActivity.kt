@@ -3,8 +3,6 @@ package com.example.vaccinationapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.TextUtils
 import android.util.Patterns
 import android.widget.Button
@@ -13,13 +11,13 @@ import android.widget.Toast
 
 import com.example.vaccinationapp.phpAdmin.DBConnection
 import com.example.vaccinationapp.phpAdmin.DBQueries
-import com.example.vaccinationapp.phpAdmin.LogInDataClass
+import com.example.vaccinationapp.phpAdmin.SignUpDataClass
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import java.security.MessageDigest
 
 import java.util.UUID
 
@@ -54,6 +52,10 @@ open class SignUpActivity : AppCompatActivity() {
     private fun registerNewUserButton() {
         registerButton.setOnClickListener {
             addUserToPhp()
+
+            val intent = Intent(this, SignInActivity::class.java)
+            startActivity(intent)
+
         }
     }
 
@@ -150,7 +152,7 @@ open class SignUpActivity : AppCompatActivity() {
     private fun addUserToPhp() {
         val email: String = registerEmail.text.toString().trim()
         val password: String = registerPassword.text.toString().trim()
-        val userId = UUID.randomUUID().toString()
+        val userId = generateUserId()
 
         // Launch a coroutine to perform database operations asynchronously
         GlobalScope.launch(Dispatchers.IO) {
@@ -158,10 +160,10 @@ open class SignUpActivity : AppCompatActivity() {
                 val connection = DBConnection.getConnection()
                 val dbQueries = DBQueries(connection)
 
-                val newUser = LogInDataClass(
+                val newUser = SignUpDataClass(
                     userId,
-                    email,
-                    password
+                    hashData(email),
+                    hashData(password)
                 )
 
                 val isSuccessful = dbQueries.insertUser(newUser)
@@ -213,6 +215,17 @@ open class SignUpActivity : AppCompatActivity() {
 //    }
     private fun generateUserId(): String {
         return UUID.randomUUID().toString()
+    }
+
+    private fun hashData(data: String): String {
+        val bytes = data.toByteArray()
+        val md = MessageDigest.getInstance("SHA-256")
+        val digest = md.digest(bytes)
+        return digest.toHexString()
+    }
+
+    fun ByteArray.toHexString(): String {
+        return joinToString("") { "%02x".format(it) }
     }
 
 

@@ -1,21 +1,28 @@
 package com.example.vaccinationapp.phpAdmin
 
 import java.sql.Connection
+import java.sql.ResultSet
 
-class DBQueries (private val connection: Connection): DbUser {
-    override fun getPassword(password: String): LogInDataClass? {
+class DBQueries(private val connection: Connection) : DbUser {
+    override fun getPassword(password: String): SignUpDataClass? {
         TODO("Not yet implemented")
     }
 
-    override fun getEmail(email: String): LogInDataClass? {
-        TODO("Not yet implemented")
+
+    override fun userExists(email: String, password: String): Boolean {
+        val query = "CALL getUser(?, ?)"
+        val callableStatement = connection.prepareCall(query)
+        callableStatement.setString(1, email)
+        callableStatement.setString(2, password)
+        val resultSet = callableStatement.executeQuery()
+        resultSet.next()
+        val count = resultSet.getInt(1)
+        callableStatement.close()
+        return count > 0
     }
 
-    override fun getUserId(id: String): LogInDataClass? {
-        TODO("Not yet implemented")
-    }
 
-    override fun insertUser(user: LogInDataClass): Boolean {
+    override fun insertUser(user: SignUpDataClass): Boolean {
 
         val call = "{CALL insertUser(?,?,?)}"
         val statement = connection.prepareCall(call)
@@ -29,5 +36,11 @@ class DBQueries (private val connection: Connection): DbUser {
         return result
     }
 
-
+    private fun mapResultSetToLogInDataClass(resultSet: ResultSet):
+            LogInDataClass? {
+        return LogInDataClass(
+            email = resultSet.getString("email"),
+            password = resultSet.getString("password")
+        )
+    }
 }
