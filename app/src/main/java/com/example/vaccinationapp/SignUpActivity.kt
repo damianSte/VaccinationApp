@@ -30,7 +30,6 @@ open class SignUpActivity : AppCompatActivity() {
     private lateinit var repeatPassword: EditText
     private lateinit var registerName: EditText
     private lateinit var registerButton: Button
-    private lateinit var testButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +41,6 @@ open class SignUpActivity : AppCompatActivity() {
         repeatPassword = findViewById(R.id.repeat_password_edit)
         registerName = findViewById(R.id.name_edit)
         registerButton = findViewById(R.id.sign_up_button)
-        testButton = findViewById(R.id.TestButton)
 
         goToSignIn()
         registerNewUserButton()
