@@ -8,14 +8,21 @@ import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import com.example.vaccinationapp.firebase.FireStoreClass
-import com.example.vaccinationapp.firebase.User
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 
-class SignUpActivity : AppCompatActivity() {
+import com.example.vaccinationapp.phpAdmin.DBConnection
+import com.example.vaccinationapp.phpAdmin.DBQueries
+import com.example.vaccinationapp.phpAdmin.SignUpDataClass
+import kotlinx.coroutines.DelicateCoroutinesApi
+
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.security.MessageDigest
+
+import java.util.UUID
+
+
+open class SignUpActivity : AppCompatActivity() {
 
     private lateinit var goToSignInButton: Button
     private lateinit var registerEmail: EditText
@@ -42,7 +49,11 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun registerNewUserButton() {
         registerButton.setOnClickListener {
-            registerUser()
+            addUserToPhp()
+
+            val intent = Intent(this, SignInActivity::class.java)
+            startActivity(intent)
+
         }
     }
 
@@ -95,47 +106,126 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
+    //    private fun registerUser() {
+//        // email used for registration
+//        val email: String = registerEmail.text.toString().trim(' ')
+//
+//        // password chosen in registration
+//        val password: String = registerPassword.text.toString().trim(' ')
+//
+//        // name according to registered Name
+//        val name: String = registerName.text.toString().trim(' ')
+//
+//        if (registrationData()) {
+//            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+//                .addOnCompleteListener(
+//                    OnCompleteListener<AuthResult> { task ->
+//                        if (task.isSuccessful) {
+//                            val firebaseUser: FirebaseUser = task.result!!.user!!
+//                            makeToast("Registration successful, user Id ${firebaseUser.uid}", false)
+//
+//                            val user = User(
+//                                "ID",
+//                                name,
+//                                true,
+//                                email,
+//                            )
+//
+//                            FireStoreClass().registerUserFS(this@SignUpActivity, user)
+//                            finish()
+//
+//                        } else {
+//                            Toast.makeText(
+//                                this@SignUpActivity, resources.getString(R.string.register_failed),
+//                                Toast.LENGTH_LONG
+//                            ).show()
+//                        }
+//                    }
+//                )
+//        }
+//
+//    }
 
-    private fun registerUser() {
-        // email used for registration
-        val email: String = registerEmail.text.toString().trim(' ')
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun addUserToPhp() {
+        val email: String = registerEmail.text.toString().trim()
+        val password: String = registerPassword.text.toString().trim()
+        val userId = generateUserId()
 
-        // password chosen in registration
-        val password: String = registerPassword.text.toString().trim(' ')
+        // Launch a coroutine to perform database operations asynchronously
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val connection = DBConnection.getConnection()
+                val dbQueries = DBQueries(connection)
 
-        // name according to registered Name
-        val name: String = registerName.text.toString().trim(' ')
-
-        if (registrationData()) {
-            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(
-                    OnCompleteListener<AuthResult> { task ->
-                        if (task.isSuccessful) {
-                            val firebaseUser: FirebaseUser = task.result!!.user!!
-                            makeToast("Registration successful, user Id ${firebaseUser.uid}", false)
-
-                            val user = User(
-                                "ID",
-                                name,
-                                true,
-                                email,
-                            )
-
-                            FireStoreClass().registerUserFS(this@SignUpActivity, user)
-                            // FirebaseAuth.getInstance().signOut() // Remove this line
-                            finish()
-
-                        } else {
-                            Toast.makeText(
-                                this@SignUpActivity, resources.getString(R.string.register_failed),
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    }
+                val newUser = SignUpDataClass(
+                    userId,
+                    hashData(email),
+                    hashData(password)
                 )
-        }
 
+                val isSuccessful = dbQueries.insertUser(newUser)
+
+                if (isSuccessful) {
+                    makeToast("Registration Successful userId: $userId ", false)
+                    connection.close()
+                } else {
+                    makeToast("Unable to Add User", false)
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
+
+    //
+//private fun addUserToPhp() {
+    //        val email: String = registerEmail.text.toString().trim()
+//        val password: String = registerPassword.text.toString().trim()
+//
+//        if (registrationData()) {
+//            makeToast("we are here", false)
+//            // Generate user ID
+//            val userId = generateUserId()
+//
+//            // Assuming DBConnection.getConnection() returns a valid database connection
+//            val connection = DBConnection.getConnection()
+//            val dbQueries = DBQueries(connection)
+//            val newUser = LogInDataClass(userId, email, password)
+//
+//            // Insert user data into the database
+//            val isSuccess = dbQueries.insertUser(newUser)
+//            connection.close()
+//
+//            if (isSuccess) {
+//                // User registration successful
+//                makeToast("Registration successful, user Id $userId", false)
+//            } else {
+//                // User registration failed
+//                Toast.makeText(
+//                    this@SignUpActivity,
+//                    resources.getString(R.string.register_failed),
+//                    Toast.LENGTH_LONG
+//                ).show()
+//            }
+//        }
+//    }
+    private fun generateUserId(): String {
+        return UUID.randomUUID().toString()
+    }
+
+    private fun hashData(data: String): String {
+        val bytes = data.toByteArray()
+        val md = MessageDigest.getInstance("SHA-256")
+        val digest = md.digest(bytes)
+        return digest.toHexString()
+    }
+
+    fun ByteArray.toHexString(): String {
+        return joinToString("") { "%02x".format(it) }
+    }
+
 
     fun userRegistrationSuccess() {
         Toast.makeText(
