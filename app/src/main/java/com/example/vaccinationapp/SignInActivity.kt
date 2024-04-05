@@ -1,7 +1,6 @@
 package com.example.vaccinationapp
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Button
@@ -13,9 +12,8 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.security.MessageDigest
 
-class SignInActivity : AppCompatActivity() {
+class SignInActivity : HashClass() {
 
     private lateinit var goToSignUpButton: Button
     private lateinit var breakInButton: Button
@@ -39,7 +37,6 @@ class SignInActivity : AppCompatActivity() {
         logIntoApp()
 
     }
-
 
     private fun logIntoApp(){
         logToApp.setOnClickListener{
@@ -75,24 +72,6 @@ class SignInActivity : AppCompatActivity() {
         }
     }
 
-//    private fun logInRegisteredUser() {
-//        // validating from validateLoginDetails()
-//        if (validateLoginDetails()) {
-//            val email = inputEmail.text.toString().trim()
-//            val password = inputPassword.text.toString().trim()
-//
-//            // getting email and password from Firebase
-//            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
-//                .addOnCompleteListener { task ->
-//                    if (task.isSuccessful) {
-//                        // Go to some Activity !!
-//                        finish()
-//                    } else {
-//                        makeToast(task.exception?.message.toString(), true)
-//                    }
-//                }
-//        }
-//    }
 
     @OptIn(DelicateCoroutinesApi::class)
     private fun logInRegisteredUser() {
@@ -130,16 +109,6 @@ class SignInActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun hashData(data: String): String {
-        val bytes = data.toByteArray()
-        val md = MessageDigest.getInstance("SHA-256")
-        val digest = md.digest(bytes)
-        return digest.toHexString()
-    }
-
-    fun ByteArray.toHexString(): String {
-        return joinToString("") { "%02x".format(it) }
-    }
 
     private fun makeToast(toast: String, errorMessage: Boolean) {
         Toast.makeText(this@SignInActivity, toast, Toast.LENGTH_LONG).show()

@@ -4,10 +4,6 @@ import java.sql.Connection
 import java.sql.ResultSet
 
 class DBQueries(private val connection: Connection) : DbUser {
-    override fun getPassword(password: String): SignUpDataClass? {
-        TODO("Not yet implemented")
-    }
-
 
     override fun userExists(email: String, password: String): Boolean {
         val query = "CALL getUser(?, ?)"
