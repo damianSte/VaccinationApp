@@ -1,4 +1,4 @@
-package com.example.vaccinationapp
+package com.example.vaccinationapp.Functional
 
 import androidx.appcompat.app.AppCompatActivity
 import java.security.MessageDigest

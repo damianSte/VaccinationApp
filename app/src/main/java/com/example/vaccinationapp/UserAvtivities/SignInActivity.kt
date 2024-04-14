@@ -1,4 +1,4 @@
-package com.example.vaccinationapp
+package com.example.vaccinationapp.UserAvtivities
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,6 +6,9 @@ import android.text.TextUtils
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.example.vaccinationapp.Functional.HashClass
+import com.example.vaccinationapp.R
+import com.example.vaccinationapp.VaccineControl.MainActivity
 import com.example.vaccinationapp.phpAdmin.DBConnection
 import com.example.vaccinationapp.phpAdmin.DBQueries
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -20,6 +23,7 @@ class SignInActivity : HashClass() {
     private lateinit var inputEmail: EditText
     private lateinit var inputPassword: EditText
     private lateinit var logToApp: Button
+    private lateinit var breaklogToApp: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,16 +35,25 @@ class SignInActivity : HashClass() {
         inputEmail = findViewById(R.id.email_edit)
         inputPassword = findViewById(R.id.password_edit)
         logToApp = findViewById(R.id.sign_in_button)
+        breaklogToApp = findViewById(R.id.break_in_button)
 
 
         goToSignInActivity()
         logIntoApp()
-
+        breakIntoApp()
     }
 
-    private fun logIntoApp(){
-        logToApp.setOnClickListener{
+    private fun logIntoApp() {
+        logToApp.setOnClickListener {
             logInRegisteredUser()
+
+        }
+    }
+
+    private fun breakIntoApp() {
+        breaklogToApp.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -66,8 +79,9 @@ class SignInActivity : HashClass() {
                 makeToast(resources.getString(R.string.wrong_log_in_password), true)
                 false
             }
+
             else -> {
-               true
+                true
             }
         }
     }
@@ -75,6 +89,7 @@ class SignInActivity : HashClass() {
 
     @OptIn(DelicateCoroutinesApi::class)
     private fun logInRegisteredUser() {
+
         val email = hashData(inputEmail.text.toString().trim())
         val password = hashData(inputPassword.text.toString().trim())
 
@@ -87,9 +102,10 @@ class SignInActivity : HashClass() {
                 connection.close()
 
                 if (userExists) {
-                    //openNextActivity()
-                } else {
-                    showToast("User not found")
+                    openNextActivity()
+                }
+                if(!userExists) {
+                    makeToast("User not found", false)
                 }
 
             } catch (e: Exception) {
@@ -98,15 +114,9 @@ class SignInActivity : HashClass() {
         }
     }
 
-    // Function to open the next activity testLogin replace with real class
-//    private fun openNextActivity() {
-//        val intent = Intent(this, testLogin::class.java)
-//        startActivity(intent)
-//    }
-
-    // Function to display a toast message
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    private fun openNextActivity() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
     }
 
 

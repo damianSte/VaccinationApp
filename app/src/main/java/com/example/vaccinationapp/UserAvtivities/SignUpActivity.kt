@@ -1,4 +1,4 @@
-package com.example.vaccinationapp
+package com.example.vaccinationapp.UserAvtivities
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +7,8 @@ import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.example.vaccinationapp.Functional.HashClass
+import com.example.vaccinationapp.R
 
 import com.example.vaccinationapp.phpAdmin.DBConnection
 import com.example.vaccinationapp.phpAdmin.DBQueries

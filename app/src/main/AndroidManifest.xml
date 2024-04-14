@@ -13,7 +13,19 @@
         android:theme="@style/Base.Theme.VaccinationApp"
         tools:targetApi="31">
         <activity
-            android:name=".HashClass"
+            android:name=".VaccineControl.AddVaccineActivity"
+            android:exported="false" />
+        <activity
+            android:name=".VaccineControl.AddVacineActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Functional.BarHandler"
+            android:exported="false" />
+        <activity
+            android:name=".VaccineControl.VaccineHistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Functional.HashClass"
             android:exported="false" />
         <activity
             android:name=".VaccineControl.testLogin"
@@ -34,10 +46,10 @@
             android:name=".firebase.User"
             android:exported="false" />
         <activity
-            android:name=".SignUpActivity"
+            android:name=".UserAvtivities.SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".SignInActivity"
+            android:name=".UserAvtivities.SignInActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -47,7 +59,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".VaccineControl.MainActivity"
             android:exported="false" />
     </application>
 

@@ -9,9 +9,15 @@ fun main() {
             val dbQueries = DBQueries(connection)
 
             val email = hashData("damian@damian.pl")
-            val password = hashData("Damian")
+            val password = hashData("Damian67")
             val userExists = dbQueries.userExists(email, password)
-            println("User exists: $userExists")
+
+            if (userExists){
+                println("Dupa")
+                println("User exists: $userExists")
+            }else{
+                println("user not found")
+            }
 
             connection.close()
         } catch (e: Exception) {
