@@ -15,56 +15,48 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.PopupWindow
+import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.example.vaccinationapp.Functional.BarHandler
 
 class AddVaccineActivity : BarHandler() {
 
     lateinit var chooseVaccine: Spinner
     lateinit var chooseDate: EditText
-    lateinit var hourChoose: EditText
-    lateinit var getName: EditText
-    lateinit var getDate: EditText
-    lateinit var getHour: EditText
+    lateinit var chooseHour: EditText
 
-
-
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_vaccine)
 
         openActivity(R.id.bottom_add)
+
         // Initialize the Spinner
         chooseVaccine = findViewById(R.id.vaccine_choose)
 
+        // Initialize EditTexts Data, Hour
+        chooseDate = findViewById(R.id.date_choose)
+        chooseHour = findViewById(R.id.hour_choose)
+
+
         // Parse CSV and extract vaccine names
         val vaccineOptions = parseCSVAndExtractVaccineNames()
-
+        // Initialize button for appoimnet selection
+        val SelectDatebutton = findViewById<Button>(R.id.selectDate)
         // Populate the Spinner with vaccine options
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, vaccineOptions)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         chooseVaccine.adapter = adapter
 
-        // Initialize the EditText for selecting date
-        chooseDate = findViewById(R.id.date_choose)
-        hourChoose = findViewById(R.id.hour_choose)
-
-//        getDate = findViewById(R.id.getVaccineDate)
-//        getHour = findViewById(R.id.getVaccineHour)
-//        getName = findViewById(R.id.getVaccineName)
 
         // Set OnClickListener to show date picker dialog
         chooseDate.setOnClickListener {
             showDatePicker()
         }
 
-        hourChoose.setOnClickListener { showTimePicker() }
-
-        val button = findViewById<Button>(R.id.selectDate)
-
-        button.setOnClickListener {
-            showPopupWindow()
+        chooseHour.setOnClickListener {
+            showTimePicker()
         }
 
         // Optionally handle selection events
@@ -147,7 +139,7 @@ class AddVaccineActivity : BarHandler() {
             TimePickerDialog.OnTimeSetListener { _, selectedHourOfDay, selectedMinute ->
                 if (isValidTime(selectedHourOfDay)) {
                     val formattedTime = String.format("%02d:%02d", selectedHourOfDay, selectedMinute)
-                    hourChoose.setText(formattedTime)
+                    chooseHour.setText(formattedTime)
                 } else {
                     Toast.makeText(this, "Please select a time between 8 AM and 5 PM", Toast.LENGTH_SHORT).show()
                     showTimePicker()
@@ -160,32 +152,5 @@ class AddVaccineActivity : BarHandler() {
     private fun isValidTime(hourOfDay: Int): Boolean {
         return hourOfDay in 8..17
     }
-
-    private fun showPopupWindow() {
-        // Initialize a new instance of PopupWindow
-        val popupWindow = PopupWindow(this)
-
-        // Inflate the layout for the popup window
-        val view = layoutInflater.inflate(R.layout.popupwindow ,null)
-
-        // Set content view of the popup window
-        popupWindow.contentView = view
-
-        // Set the width and height of the popup window
-        popupWindow.width = WindowManager.LayoutParams.WRAP_CONTENT
-        popupWindow.height = WindowManager.LayoutParams.WRAP_CONTENT
-
-        // Set focusable true to make the window focusable
-        popupWindow.isFocusable = true
-
-        // Show the popup window at the center of the activity
-        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
-
-        // Set a dismiss listener to close the popup window when clicked outside
-        popupWindow.setOnDismissListener {
-            // Perform any actions when the popup window is dismissed
-        }
-    }
-
 
 }

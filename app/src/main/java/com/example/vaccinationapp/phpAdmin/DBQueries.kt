@@ -17,7 +17,6 @@ class DBQueries(private val connection: Connection) : DbUser {
         return count > 0
     }
 
-
     override fun insertUser(user: SignUpDataClass): Boolean {
 
         val call = "{CALL insertUser(?,?,?)}"

@@ -8,7 +8,7 @@ object DBConnection {
 
         // Database connection details
         private const val URL =
-            "jdbc:mysql://sql11.freesqldatabase.com:3306/sql11692905?useUnicode=true&characterEncoding=utf-8&serverTimezone=CET" //
+            "jdbc:mysql://sql11.freesqldatabase.com:3306/sql11700171?useUnicode=true&characterEncoding=utf-8&serverTimezone=CET" //
         private const val USER = "sql11700171"
         private const val PASS = "AcUyySU2gK"
     init {

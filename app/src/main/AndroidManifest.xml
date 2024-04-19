@@ -12,7 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.VaccinationApp"
         tools:targetApi="31">
-
+        <activity
+            android:name=".Functional.PopUpWindow"
+            android:exported="false" />
         <activity
             android:name=".VaccineControl.AddVaccineActivity"
             android:exported="false" />

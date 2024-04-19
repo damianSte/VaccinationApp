@@ -1,31 +1,34 @@
 package com.example.vaccinationapp.phpAdmin
 
 import java.security.MessageDigest
+import java.sql.SQLException
+import java.util.UUID
 
 fun main() {
+    try {
+        val email = "dupa1@up.pl"
+        val password = "12345678"
 
-        try {
-            val connection = DBConnection.getConnection()
-            val dbQueries = DBQueries(connection)
+        val emailHashed = hashData(email)
+        val passHashed = hashData(password)
 
-            val email = hashData("damian@damian.pl")
-            val password = hashData("Damian67")
-            val userExists = dbQueries.userExists(email, password)
+        val connection = DBConnection.getConnection()
+        val dbQueries = DBQueries(connection)
 
-            if (userExists){
-                println("Dupa")
-                println("User exists: $userExists")
-            }else{
-                println("user not found")
-            }
+        val userExists = dbQueries.userExists(emailHashed, passHashed)
 
-            connection.close()
-        } catch (e: Exception) {
-            e.printStackTrace()
+        connection.close()
+
+        if (userExists) {
+            println("User found")
+        } else {
+            println("User not found")
         }
-
-
+    } catch (e: SQLException) {
+        e.printStackTrace()
+    }
 }
+
 private fun hashData(data: String): String {
     val bytes = data.toByteArray()
     val md = MessageDigest.getInstance("SHA-256")
@@ -35,4 +38,8 @@ private fun hashData(data: String): String {
 
 fun ByteArray.toHexString(): String {
     return joinToString("") { "%02x".format(it) }
+}
+
+private fun generateUserId(): String {
+    return UUID.randomUUID().toString()
 }
