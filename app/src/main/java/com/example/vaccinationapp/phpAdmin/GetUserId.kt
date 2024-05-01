@@ -1,7 +1,7 @@
 package com.example.vaccinationapp.phpAdmin
 
-data class LogInDataClass(
+ data class GetUserId (
     val email: String? = null,
-    val password: String? = null,
+    val id: String? = null
 
 )

@@ -1,6 +1,7 @@
 package com.example.vaccinationapp.Functional
 
 import android.content.Intent
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.vaccinationapp.R
 import com.example.vaccinationapp.VaccineControl.AddVaccineActivity
@@ -11,6 +12,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 open class BarHandler : AppCompatActivity() {
 
     fun openActivity(buttonId: Int) {
+
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationBar)
         bottomNavigationView.selectedItemId = buttonId
 

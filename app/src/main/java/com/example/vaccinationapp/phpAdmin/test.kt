@@ -6,24 +6,19 @@ import java.util.UUID
 
 fun main() {
     try {
-        val email = "dupa1@up.pl"
-        val password = "12345678"
-
-        val emailHashed = hashData(email)
-        val passHashed = hashData(password)
+        val vaccineId = generateUserId()
+        val vaccineRecordId = generateUserId()
+        val userId = "00403d88-a5eb-46bb-bdba-eaa9d30c1972"
+        val vaccineDate = "1.01.2023"
 
         val connection = DBConnection.getConnection()
         val dbQueries = DBQueries(connection)
 
-        val userExists = dbQueries.userExists(emailHashed, passHashed)
+        val newVaccine = AddVaccineDataClass(vaccineId, vaccineRecordId, userId, vaccineDate)
+        dbQueries.insertVaccine(newVaccine)
 
         connection.close()
 
-        if (userExists) {
-            println("User found")
-        } else {
-            println("User not found")
-        }
     } catch (e: SQLException) {
         e.printStackTrace()
     }

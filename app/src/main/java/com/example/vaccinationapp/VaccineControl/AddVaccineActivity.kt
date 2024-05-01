@@ -1,21 +1,17 @@
 package com.example.vaccinationapp.VaccineControl
 
-import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Bundle
-import android.view.Gravity
 import android.view.View
-import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.Spinner
 import com.example.vaccinationapp.R
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
-import android.widget.PopupWindow
-import android.widget.TextView
 import android.widget.Toast
 import com.example.vaccinationapp.Functional.BarHandler
 
@@ -25,7 +21,6 @@ class AddVaccineActivity : BarHandler() {
     lateinit var chooseDate: EditText
     lateinit var chooseHour: EditText
 
-    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_vaccine)
@@ -42,14 +37,16 @@ class AddVaccineActivity : BarHandler() {
 
         // Parse CSV and extract vaccine names
         val vaccineOptions = parseCSVAndExtractVaccineNames()
-        // Initialize button for appoimnet selection
-        val SelectDatebutton = findViewById<Button>(R.id.selectDate)
+        // Initialize button for appointment selection
+        val selectDatebutton = findViewById<Button>(R.id.selectDate)
         // Populate the Spinner with vaccine options
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, vaccineOptions)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         chooseVaccine.adapter = adapter
 
-
+        selectDatebutton.setOnClickListener {
+            openPopupActivity()
+        }
         // Set OnClickListener to show date picker dialog
         chooseDate.setOnClickListener {
             showDatePicker()
@@ -152,5 +149,16 @@ class AddVaccineActivity : BarHandler() {
     private fun isValidTime(hourOfDay: Int): Boolean {
         return hourOfDay in 8..17
     }
+
+    private fun openPopupActivity() {
+        val intent = Intent(this, PopUpWindow::class.java).apply {
+            putExtra("VACCINENAME", chooseVaccine.selectedItem.toString())
+            putExtra("DATE", chooseDate.text.toString())
+            putExtra("HOUR", chooseHour.text.toString())
+        }
+        startActivity(intent)
+    }
+
+
 
 }
