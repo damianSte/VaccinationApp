@@ -11,5 +11,8 @@
     <string name="use_not_found"><u>User not found, check e-mail, password or create  an account </u></string>
     <string name="wrong_log_in_email"><u>Invalid e-mail</u></string>
     <string name="wrong_log_in_password"><u>Invalid password</u></string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
 
 </resources>

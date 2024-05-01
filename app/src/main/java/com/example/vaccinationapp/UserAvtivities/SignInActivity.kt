@@ -1,27 +1,33 @@
-package com.example.vaccinationapp
+package com.example.vaccinationapp.UserAvtivities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.example.vaccinationapp.Functional.BarHandler
+import com.example.vaccinationapp.Functional.HashClass
+import com.example.vaccinationapp.VaccineControl.PopUpWindow
+import com.example.vaccinationapp.R
+import com.example.vaccinationapp.VaccineControl.MainActivity
 import com.example.vaccinationapp.phpAdmin.DBConnection
 import com.example.vaccinationapp.phpAdmin.DBQueries
+import com.example.vaccinationapp.phpAdmin.GetUserId
+import com.example.vaccinationapp.phpAdmin.UserData
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.security.MessageDigest
+import java.sql.SQLException
 
-class SignInActivity : AppCompatActivity() {
+class SignInActivity : HashClass() {
 
     private lateinit var goToSignUpButton: Button
-    private lateinit var breakInButton: Button
     private lateinit var inputEmail: EditText
     private lateinit var inputPassword: EditText
     private lateinit var logToApp: Button
+    private lateinit var breakLogToApp: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,21 +35,30 @@ class SignInActivity : AppCompatActivity() {
 
 
         goToSignUpButton = findViewById(R.id.go_to_sign_up_button)
-        breakInButton = findViewById(R.id.break_in_button)
         inputEmail = findViewById(R.id.email_edit)
         inputPassword = findViewById(R.id.password_edit)
         logToApp = findViewById(R.id.sign_in_button)
+        breakLogToApp = findViewById(R.id.break_in_button)
 
 
         goToSignInActivity()
         logIntoApp()
+        breakIntoApp()
+
+
 
     }
 
-
-    private fun logIntoApp(){
-        logToApp.setOnClickListener{
+    private fun logIntoApp() {
+        logToApp.setOnClickListener {
             logInRegisteredUser()
+        }
+    }
+
+    private fun breakIntoApp() {
+        breakLogToApp.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -69,33 +84,17 @@ class SignInActivity : AppCompatActivity() {
                 makeToast(resources.getString(R.string.wrong_log_in_password), true)
                 false
             }
+
             else -> {
-               true
+                true
             }
         }
     }
 
-//    private fun logInRegisteredUser() {
-//        // validating from validateLoginDetails()
-//        if (validateLoginDetails()) {
-//            val email = inputEmail.text.toString().trim()
-//            val password = inputPassword.text.toString().trim()
-//
-//            // getting email and password from Firebase
-//            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
-//                .addOnCompleteListener { task ->
-//                    if (task.isSuccessful) {
-//                        // Go to some Activity !!
-//                        finish()
-//                    } else {
-//                        makeToast(task.exception?.message.toString(), true)
-//                    }
-//                }
-//        }
-//    }
 
     @OptIn(DelicateCoroutinesApi::class)
     private fun logInRegisteredUser() {
+
         val email = hashData(inputEmail.text.toString().trim())
         val password = hashData(inputPassword.text.toString().trim())
 
@@ -108,9 +107,11 @@ class SignInActivity : AppCompatActivity() {
                 connection.close()
 
                 if (userExists) {
-                    //openNextActivity()
-                } else {
-                    showToast("User not found")
+                    openNextActivity()
+                    sendId()
+                }
+                if(!userExists) {
+                    makeToast("User not found", false)
                 }
 
             } catch (e: Exception) {
@@ -119,30 +120,39 @@ class SignInActivity : AppCompatActivity() {
         }
     }
 
-    // Function to open the next activity testLogin replace with real class
-//    private fun openNextActivity() {
-//        val intent = Intent(this, testLogin::class.java)
-//        startActivity(intent)
-//    }
 
-    // Function to display a toast message
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    private fun sendId() {
+        val email = inputEmail.text.toString().trim()
+        val emailHashed = hashData(email)
+
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val connection = DBConnection.getConnection()
+                val dbQueries = DBQueries(connection)
+
+                val userId = dbQueries.getUserId(emailHashed)
+
+                connection.close()
+
+                if (userId != null) {
+                    UserData.setUserId(userId)
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
-    private fun hashData(data: String): String {
-        val bytes = data.toByteArray()
-        val md = MessageDigest.getInstance("SHA-256")
-        val digest = md.digest(bytes)
-        return digest.toHexString()
+    private fun openNextActivity() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
     }
 
-    fun ByteArray.toHexString(): String {
-        return joinToString("") { "%02x".format(it) }
-    }
 
     private fun makeToast(toast: String, errorMessage: Boolean) {
         Toast.makeText(this@SignInActivity, toast, Toast.LENGTH_LONG).show()
     }
+
 
 }
