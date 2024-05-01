@@ -134,7 +134,14 @@ open class SignUpActivity : HashClass() {
         }
     }
 
+    private fun validateEmail(email: String): Boolean {
+        val emailPatter = Patterns.EMAIL_ADDRESS
+        return emailPatter.matcher(email).matches()
+    }
 
+    private fun generateUserId(): String {
+        return UUID.randomUUID().toString()
+    }
 
     private fun userRegistrationSuccess() {
         Toast.makeText(
