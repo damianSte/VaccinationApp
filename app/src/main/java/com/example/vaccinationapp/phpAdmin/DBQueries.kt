@@ -1,7 +1,10 @@
 package com.example.vaccinationapp.phpAdmin
 
+import com.example.vaccinationapp.phpAdmin.DataClasses.AddVaccineDataClass
+import com.example.vaccinationapp.phpAdmin.DataClasses.SignUpDataClass
+import com.example.vaccinationapp.phpAdmin.DataClasses.VaccineDataClass
 import java.sql.Connection
-import java.sql.ResultSet
+import java.sql.SQLException
 
 class DBQueries(private val connection: Connection) : DbUser {
 
@@ -47,7 +50,7 @@ class DBQueries(private val connection: Connection) : DbUser {
         statement.setString(1, vaccine.vaccineId)
         statement.setString(2, vaccine.recordId)
         statement.setString(3, vaccine.userId)
-        statement.setString(4, vaccine.dateOfVaccine.toString())
+        statement.setString(4, vaccine.dateOfVaccine)
         //statement.setBoolean(5, vaccine.nextDoseReq)
 
         val result = !statement.execute()
@@ -71,4 +74,51 @@ class DBQueries(private val connection: Connection) : DbUser {
 
        return userId
     }
+
+    fun getVaccineId(vaccineName: String): String?{
+        val call = "{CALL getVaccineId(?)}"
+        val statement = connection.prepareCall(call)
+        statement.setString(1, vaccineName)
+        val resultSet = statement.executeQuery()
+
+        var vaccineID: String? = null
+        if (resultSet.next()) {
+             vaccineID= resultSet.getString("vaccine_id")
+        }
+
+        resultSet.close()
+        statement.close()
+
+        return vaccineID
+    }
+
+    fun getVaccineHistory(userId: String): List<VaccineDataClass> {
+        val vaccineList = mutableListOf<VaccineDataClass>()
+
+        try {
+            val call = "{CALL getVaccineHistory(?)}"
+            val statement = connection.prepareCall(call)
+            statement.setString(1, userId)
+
+            val resultSet = statement.executeQuery()
+
+            while (resultSet.next()) {
+                val name = resultSet.getString("vaccine_name")
+                val manufacturer = resultSet.getString("manufacturer")
+                val lastDose = resultSet.getString("date_of_vaccine")
+
+                val vaccine = VaccineDataClass(name, manufacturer, lastDose)
+                vaccineList.add(vaccine)
+            }
+        } catch (e: SQLException) {
+            // Handle SQL exceptions
+            e.printStackTrace()
+        }
+
+        println(vaccineList)
+        return vaccineList
+    }
+
+
+
 }

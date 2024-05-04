@@ -1,21 +1,20 @@
 package com.example.vaccinationapp.phpAdmin
 
+import com.example.vaccinationapp.phpAdmin.DataClasses.AddVaccineDataClass
 import java.security.MessageDigest
 import java.sql.SQLException
 import java.util.UUID
 
 fun main() {
     try {
-        val vaccineId = generateUserId()
-        val vaccineRecordId = generateUserId()
+        val vaccineId = "001"
         val userId = "00403d88-a5eb-46bb-bdba-eaa9d30c1972"
-        val vaccineDate = "1.01.2023"
 
         val connection = DBConnection.getConnection()
         val dbQueries = DBQueries(connection)
 
-        val newVaccine = AddVaccineDataClass(vaccineId, vaccineRecordId, userId, vaccineDate)
-        dbQueries.insertVaccine(newVaccine)
+
+        dbQueries.getVaccineHistory(userId)
 
         connection.close()
 

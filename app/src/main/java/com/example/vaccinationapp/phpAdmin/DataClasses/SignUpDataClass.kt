@@ -1,4 +1,4 @@
-package com.example.vaccinationapp.phpAdmin
+package com.example.vaccinationapp.phpAdmin.DataClasses
 
 data class SignUpDataClass (
 

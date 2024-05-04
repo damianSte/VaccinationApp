@@ -1,4 +1,4 @@
-package com.example.vaccinationapp.VaccineControl
+package com.example.vaccinationapp.VaccineControl.AddingVaccines
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -25,6 +25,7 @@ class AddVaccineActivity : BarHandler() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_vaccine)
 
+
         openActivity(R.id.bottom_add)
 
         // Initialize the Spinner
@@ -34,19 +35,26 @@ class AddVaccineActivity : BarHandler() {
         chooseDate = findViewById(R.id.date_choose)
         chooseHour = findViewById(R.id.hour_choose)
 
+        val selectDateButton = findViewById<Button>(R.id.selectDate)
 
-        // Parse CSV and extract vaccine names
+        // Parse CSV and extract vaccine names with IDs
         val vaccineOptions = parseCSVAndExtractVaccineNames()
-        // Initialize button for appointment selection
-        val selectDatebutton = findViewById<Button>(R.id.selectDate)
+
+        // Extract vaccine names for display in the Spinner
+        val vaccineNames = vaccineOptions.map { it.second }
+
+        // Extract vaccine IDs for database storage
+        val vaccineIDs = vaccineOptions.map { it.first }
+
         // Populate the Spinner with vaccine options
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, vaccineOptions)
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, vaccineNames)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         chooseVaccine.adapter = adapter
 
-        selectDatebutton.setOnClickListener {
+        selectDateButton.setOnClickListener {
             openPopupActivity()
         }
+
         // Set OnClickListener to show date picker dialog
         chooseDate.setOnClickListener {
             showDatePicker()
@@ -60,8 +68,9 @@ class AddVaccineActivity : BarHandler() {
         chooseVaccine.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 // Perform action based on selection
-                val selectedVaccine = vaccineOptions[position]
-                // Do something with the selected vaccine
+                val selectedVaccineName = vaccineNames[position]
+                val selectedVaccineID = vaccineIDs[position]
+                // Do something with the selected vaccine name and ID
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -70,41 +79,43 @@ class AddVaccineActivity : BarHandler() {
         })
     }
 
-    private fun parseCSVAndExtractVaccineNames(): List<String> {
-        val vaccineNames = mutableListOf<String>()
+    private fun parseCSVAndExtractVaccineNames(): List<Pair<String, String>> {
+        val vaccineNames = mutableListOf<Pair<String, String>>()
         val csvData = """
-            Adenovirus,Barr Labs Inc.
-            Anthrax,Emergent BioSolutions
-            Cholera,PaxVax
-            COVID-19,Pfizer
-            Dengue,ModernaTx
-            DTaP,Sanofi
-            DT,Sanofi
-            Haemophilus influenzae type b (Hib),GlaxoSmithKline
-            Hepatitis A,Merck
-            Hepatitis B,Merck
-            Herpes Zoster (Shingles),GlaxoSmithKline
-            Human Papillomavirus (HPV),Merck
-            Influenza,Seqirus
-            Japanese encephalitis,Valneva
-            Measles; Mumps; Rubella,Merck
-            Meningococcal,Sanofi
-            Pneumococcal,Pfizer
-            Polio,Sanofi
-            Rabies,GlaxoSmithKline
-            Rotavirus,Merck
-            Tetanus; (reduced) Diphtheria,Massachusetts Biological Labs
-            Typhoid,PaxVax
-            Varicella,Merck
-            Vaccinia (Smallpox),Sanofi
-            Yellow Fever,Sanofi
+           001,Adenovirus,Barr Labs Inc., 1
+002,Anthrax,Emergent BioSolutions,3
+003,Cholera,PaxVax, 1
+004,COVID-19,Pfizer, 2
+005,Dengue,ModernaTx, 3
+006,DTaP,Sanofi, 5
+007,DT,Sanofi, 5
+008,Haemophilus influenzae type b (Hib),GlaxoSmithKline, 4
+009,Hepatitis A,Merck, 2
+010,Hepatitis B,Merck, 3
+011,Herpes Zoster (Shingles),GlaxoSmithKline,2
+012,Human Papillomavirus (HPV),Merck, 2 or 3
+013,Influenza,Seqirus, 1 or 2
+014,Japanese encephalitis,Valneva, 2
+015,Measles; Mumps; Rubella,Merck, 2
+016,Meningococcal,Sanofi, 2
+017,Pneumococcal,Pfizer, 4
+018,Polio,Sanofi, 4
+019,Rabies,GlaxoSmithKline, 3
+020,Rotavirus,Merck, 3
+021,Tetanus;(reduced) Diphtheria,Massachusetts Biological Labs, 1
+022,Typhoid,PaxVax, 4
+023,Varicella,Merck, 2
+024,Vaccinia (Smallpox),Sanofi, 1
+025,Yellow Fever,Sanofi, 1
+
         """.trimIndent()
         val lines = csvData.split("\n")
         for (line in lines) {
             val columns = line.split(",")
-            if (columns.size >= 2) {
-                val vaccineName = columns[0].trim()
-                vaccineNames.add(vaccineName)
+            if (columns.size >= 3) {
+                val vaccineID = columns[0].trim()
+                val vaccineName = columns[1].trim()
+                vaccineNames.add(Pair(vaccineID, vaccineName))
             }
         }
         return vaccineNames
@@ -116,10 +127,10 @@ class AddVaccineActivity : BarHandler() {
         val month = calendar.get(Calendar.MONTH)
         val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
 
-
         val datePickerDialog = DatePickerDialog(this,
             DatePickerDialog.OnDateSetListener { _, selectedYear, selectedMonth, selectedDay ->
-                val formattedDate = "$selectedDay.${selectedMonth + 1}.$selectedYear"
+                // Adjust month +1 as months are zero-based in Calendar
+                val formattedDate = String.format("%d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay)
                 chooseDate.setText(formattedDate)
             }, year, month, dayOfMonth)
 
@@ -127,6 +138,7 @@ class AddVaccineActivity : BarHandler() {
 
         datePickerDialog.show()
     }
+
 
     private fun showTimePicker() {
         val calendar = Calendar.getInstance()
@@ -159,6 +171,5 @@ class AddVaccineActivity : BarHandler() {
         startActivity(intent)
     }
 
-
-
 }
+

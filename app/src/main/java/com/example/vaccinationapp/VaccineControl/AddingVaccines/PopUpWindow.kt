@@ -1,4 +1,4 @@
-package com.example.vaccinationapp.VaccineControl
+package com.example.vaccinationapp.VaccineControl.AddingVaccines
 
 import android.os.Bundle
 import android.widget.Button
@@ -6,7 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.vaccinationapp.R
-import com.example.vaccinationapp.phpAdmin.AddVaccineDataClass
+import com.example.vaccinationapp.phpAdmin.DataClasses.AddVaccineDataClass
 import com.example.vaccinationapp.phpAdmin.DBConnection
 import com.example.vaccinationapp.phpAdmin.DBQueries
 import com.example.vaccinationapp.phpAdmin.UserData
@@ -31,14 +31,14 @@ class PopUpWindow : AppCompatActivity() {
         getName = findViewById(R.id.getVaccineName)
         confirmButton = findViewById(R.id.confirm_button)
 
-        val spinnerValue = intent.getStringExtra("VACCINENAME")
+        val vaccineNameSpinner = intent.getStringExtra("VACCINENAME")
         val editTextDate = intent.getStringExtra("DATE")
         val editTextHour = intent.getStringExtra("HOUR")
 
 
         val close = findViewById<ImageView>(R.id.closePopUpWindow)
 
-        getName.text = spinnerValue
+        getName.text = vaccineNameSpinner
         getDate.text = editTextDate
         getHour.text = editTextHour
 
@@ -48,31 +48,53 @@ class PopUpWindow : AppCompatActivity() {
         }
         confirmButton.setOnClickListener{
             addVaccineToDatabase()
+
         }
     }
     @OptIn(DelicateCoroutinesApi::class)
     private fun addVaccineToDatabase() {
-
-        val vaccineId = generateId()
-        val vaccineRecordId = generateId()
-        val userId = UserData.getUserId()
-        val vaccineDate = intent.getStringExtra("DATE").toString()
+        val vaccineName = getName.text.toString()
+        val vaccineDate = intent.getStringExtra("DATE")
 
         GlobalScope.launch(Dispatchers.IO) {
             try {
-                val connection = DBConnection.getConnection()
-                val dbQueries = DBQueries(connection)
+                val vaccineId = addVaccineId(vaccineName)
+                val vaccineRecordId = generateId()
+                val userId = UserData.getUserId()
 
-                val newVaccine = AddVaccineDataClass(vaccineId, vaccineRecordId, userId, vaccineDate)
-                dbQueries.insertVaccine(newVaccine)
+                if (vaccineId != null) {
+                    val connection = DBConnection.getConnection()
+                    val dbQueries = DBQueries(connection)
 
-                connection.close()
+                    val newVaccine = AddVaccineDataClass(vaccineId, vaccineRecordId, userId, vaccineDate)
+                    dbQueries.insertVaccine(newVaccine)
 
+                    connection.close()
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
+
+        finish()
     }
+
+    private fun addVaccineId(vaccineName: String): String? {
+        return try {
+            val connection = DBConnection.getConnection()
+            val dbQueries = DBQueries(connection)
+
+            val vaccineId = dbQueries.getVaccineId(vaccineName)
+
+            connection.close()
+
+            vaccineId
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
 
     private fun generateId(): String {
         return UUID.randomUUID().toString()

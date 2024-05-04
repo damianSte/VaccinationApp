@@ -2,8 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/HistoryView"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
 
     <TextView
         android:id="@+id/past_vaccines_text"
@@ -22,23 +24,20 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.054" />
+        app:layout_constraintVertical_bias="0.026" />
 
-    <ScrollView
-        android:id="@+id/past_vaccines_scroll"
-        android:layout_width="372dp"
-        android:layout_height="566dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationBar"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/vaccinesRecycleView"
+        android:layout_width="360dp"
+        android:layout_height="551dp"
+        android:layout_marginTop="72dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="67dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.333"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/past_vaccines_text"
-        app:layout_constraintVertical_bias="0.052">
-
-        <!-- recycle view of past vaccine tiles -->
-        <include layout="@layout/vaccine_tile_layout" />
-
-    </ScrollView>
+        app:layout_constraintTop_toTopOf="@+id/past_vaccines_text" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationBar"
@@ -55,4 +54,5 @@
         app:menu="@menu/bottom_menu"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="0dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

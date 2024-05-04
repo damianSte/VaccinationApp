@@ -1,4 +1,4 @@
-package com.example.vaccinationapp.phpAdmin
+package com.example.vaccinationapp.phpAdmin.DataClasses
 
 import java.util.Date
 

@@ -13,13 +13,13 @@
         android:theme="@style/Base.Theme.VaccinationApp"
         tools:targetApi="31">
         <activity
-            android:name=".phpAdmin.AddVaccineDataClass"
+            android:name=".phpAdmin.DataClasses.AddVaccineDataClass"
             android:exported="false" />
         <activity
-            android:name=".VaccineControl.PopUpWindow"
+            android:name=".VaccineControl.AddingVaccines.PopUpWindow"
             android:exported="false" />
         <activity
-            android:name=".VaccineControl.AddVaccineActivity"
+            android:name=".VaccineControl.AddingVaccines.AddVaccineActivity"
             android:exported="false" />
         <activity
             android:name=".Functional.BarHandler"
@@ -31,7 +31,7 @@
             android:name=".Functional.HashClass"
             android:exported="false" />
         <activity
-            android:name=".phpAdmin.SignUpDataClass"
+            android:name=".phpAdmin.DataClasses.SignUpDataClass"
             android:exported="false" />
         <activity
             android:name=".UserAvtivities.SignUpActivity"

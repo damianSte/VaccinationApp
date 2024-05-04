@@ -6,20 +6,16 @@ import android.text.TextUtils
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import com.example.vaccinationapp.Functional.BarHandler
 import com.example.vaccinationapp.Functional.HashClass
-import com.example.vaccinationapp.VaccineControl.PopUpWindow
 import com.example.vaccinationapp.R
 import com.example.vaccinationapp.VaccineControl.MainActivity
 import com.example.vaccinationapp.phpAdmin.DBConnection
 import com.example.vaccinationapp.phpAdmin.DBQueries
-import com.example.vaccinationapp.phpAdmin.GetUserId
 import com.example.vaccinationapp.phpAdmin.UserData
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.sql.SQLException
 
 class SignInActivity : HashClass() {
 

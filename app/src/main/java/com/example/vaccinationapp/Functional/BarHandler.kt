@@ -1,10 +1,9 @@
 package com.example.vaccinationapp.Functional
 
 import android.content.Intent
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.vaccinationapp.R
-import com.example.vaccinationapp.VaccineControl.AddVaccineActivity
+import com.example.vaccinationapp.VaccineControl.AddingVaccines.AddVaccineActivity
 import com.example.vaccinationapp.VaccineControl.MainActivity
 import com.example.vaccinationapp.VaccineControl.VaccineHistoryActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
