@@ -9,8 +9,8 @@ import com.example.vaccinationapp.phpAdmin.DataClasses.VaccineDataClass
 import com.example.vaccinationapp.R
 
 
-class VaccineAdapter(private val vaccineList: MutableList<VaccineDataClass>) :
-    RecyclerView.Adapter<VaccineAdapter.VaccineViewHolder>() {
+class VaccineScheduledAdapter(private val vaccineList: MutableList<VaccineDataClass>) :
+    RecyclerView.Adapter<VaccineScheduledAdapter.VaccineViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VaccineViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -31,11 +31,13 @@ class VaccineAdapter(private val vaccineList: MutableList<VaccineDataClass>) :
         private val nameText: TextView = itemView.findViewById(R.id.name_text)
         private val manufacturerText: TextView = itemView.findViewById(R.id.manufacturer_text)
         private val lastDoseText: TextView = itemView.findViewById(R.id.last_dose_text)
+        private val timeText: TextView = itemView.findViewById(R.id.appointment_time_text)
 
         fun bind(vaccine: VaccineDataClass) {
             nameText.text = vaccine.name
             manufacturerText.text = " • Manufacturer: ${vaccine.manufacturer}"
             lastDoseText.text = " • Last dose: ${vaccine.lastDose}"
+            timeText.text = " • Appointment time: ${vaccine.time}"
         }
     }
 

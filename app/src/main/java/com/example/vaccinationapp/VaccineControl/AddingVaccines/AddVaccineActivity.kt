@@ -82,6 +82,7 @@ class AddVaccineActivity : BarHandler() {
     private fun parseCSVAndExtractVaccineNames(): List<Pair<String, String>> {
         val vaccineNames = mutableListOf<Pair<String, String>>()
         val csvData = """
+               ,    ,    ,   
            001,Adenovirus,Barr Labs Inc., 1
 002,Anthrax,Emergent BioSolutions,3
 003,Cholera,PaxVax, 1
@@ -162,14 +163,35 @@ class AddVaccineActivity : BarHandler() {
         return hourOfDay in 8..17
     }
 
+//    private fun openPopupActivity() {
+//        val intent = Intent(this, PopUpWindow::class.java).apply {
+//            putExtra("VACCINENAME", chooseVaccine.selectedItem.toString())
+//            putExtra("DATE", chooseDate.text.toString())
+//            putExtra("HOUR", chooseHour.text.toString())
+//        }
+//        startActivity(intent)
+//    }
+
     private fun openPopupActivity() {
+        val selectedDate = chooseDate.text.toString()
+        val dateParts = selectedDate.split("-")
+        val year = dateParts[0].toInt()
+        val month = dateParts[1].toInt() - 1 // Adjust month to zero-based
+        val day = dateParts[2].toInt()
+
+        val selectedDateCalendar = Calendar.getInstance()
+        selectedDateCalendar.set(year, month, day)
+
+        val selectedSqlDate = java.sql.Date(selectedDateCalendar.timeInMillis)
+
         val intent = Intent(this, PopUpWindow::class.java).apply {
             putExtra("VACCINENAME", chooseVaccine.selectedItem.toString())
-            putExtra("DATE", chooseDate.text.toString())
+            putExtra("DATE", selectedSqlDate)
             putExtra("HOUR", chooseHour.text.toString())
         }
         startActivity(intent)
     }
+
 
 }
 

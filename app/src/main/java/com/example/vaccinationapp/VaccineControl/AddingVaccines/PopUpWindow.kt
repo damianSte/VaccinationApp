@@ -14,6 +14,8 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.sql.Date
+
 import java.util.UUID
 
 class PopUpWindow : AppCompatActivity() {
@@ -22,6 +24,7 @@ class PopUpWindow : AppCompatActivity() {
     lateinit var getDate: TextView
     lateinit var getHour: TextView
     lateinit var confirmButton: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.popupwindow)
@@ -32,30 +35,27 @@ class PopUpWindow : AppCompatActivity() {
         confirmButton = findViewById(R.id.confirm_button)
 
         val vaccineNameSpinner = intent.getStringExtra("VACCINENAME")
-        val editTextDate = intent.getStringExtra("DATE")
+        val editTextDate = intent.getSerializableExtra("DATE") as Date
         val editTextHour = intent.getStringExtra("HOUR")
-
 
         val close = findViewById<ImageView>(R.id.closePopUpWindow)
 
         getName.text = vaccineNameSpinner
-        getDate.text = editTextDate
+        getDate.text = editTextDate.toString()
         getHour.text = editTextHour
-
 
         close.setOnClickListener {
             finish()
         }
-        confirmButton.setOnClickListener{
-            addVaccineToDatabase()
-
+        confirmButton.setOnClickListener {
+            addVaccineToDatabase(editTextDate)
         }
     }
-    @OptIn(DelicateCoroutinesApi::class)
-    private fun addVaccineToDatabase() {
-        val vaccineName = getName.text.toString()
-        val vaccineDate = intent.getStringExtra("DATE")
 
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun addVaccineToDatabase(vaccineDate: Date) {
+        val vaccineName = getName.text.toString()
+        val vaccineTime = getHour.text.toString()
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 val vaccineId = addVaccineId(vaccineName)
@@ -66,7 +66,7 @@ class PopUpWindow : AppCompatActivity() {
                     val connection = DBConnection.getConnection()
                     val dbQueries = DBQueries(connection)
 
-                    val newVaccine = AddVaccineDataClass(vaccineId, vaccineRecordId, userId, vaccineDate)
+                    val newVaccine = AddVaccineDataClass(vaccineId, vaccineRecordId, userId, vaccineDate,vaccineTime )
                     dbQueries.insertVaccine(newVaccine)
 
                     connection.close()
@@ -94,7 +94,6 @@ class PopUpWindow : AppCompatActivity() {
             null
         }
     }
-
 
     private fun generateId(): String {
         return UUID.randomUUID().toString()
