@@ -6,7 +6,7 @@
     android:id="@+id/popup_window_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".VaccineControl.AddingVaccines.PopUpWindow">
+    tools:context=".VaccineControl.PopUpWindow">
 
 
     <androidx.cardview.widget.CardView

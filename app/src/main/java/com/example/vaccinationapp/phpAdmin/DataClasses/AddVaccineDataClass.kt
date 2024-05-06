@@ -1,7 +1,6 @@
 package com.example.vaccinationapp.phpAdmin.DataClasses
 
 import java.sql.Date
-import java.sql.Time
 
 data class AddVaccineDataClass(
 
@@ -9,7 +8,7 @@ data class AddVaccineDataClass(
     val recordId: String? = null,
     val userId: String? = null,
     val dateOfVaccine: Date? = null,
-    val timeOfVaccine: String? = null,
+    val timeOfVaccine: String? = null
 
-    )
+)
 

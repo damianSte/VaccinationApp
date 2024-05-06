@@ -15,7 +15,7 @@
         android:fontFamily="@font/poppins_regular"
         android:gravity="start|center"
         android:padding="5dp"
-        android:text="Past Vaccines"
+        android:text="Vaccination History"
         android:textColor="?attr/colorOnPrimary"
         android:textFontWeight="600"
         android:textSize="30sp"

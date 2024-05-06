@@ -36,7 +36,7 @@ class VaccineScheduledAdapter(private val vaccineList: MutableList<VaccineDataCl
         fun bind(vaccine: VaccineDataClass) {
             nameText.text = vaccine.name
             manufacturerText.text = " • Manufacturer: ${vaccine.manufacturer}"
-            lastDoseText.text = " • Last dose: ${vaccine.lastDose}"
+            lastDoseText.text = " • Date: ${vaccine.lastDose}"
             timeText.text = " • Appointment time: ${vaccine.time}"
         }
     }

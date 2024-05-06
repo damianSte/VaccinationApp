@@ -1,4 +1,4 @@
-package com.example.vaccinationapp.VaccineControl.AddingVaccines
+package com.example.vaccinationapp.VaccineControl
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog

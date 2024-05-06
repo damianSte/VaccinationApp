@@ -1,4 +1,4 @@
-package com.example.vaccinationapp.VaccineControl.AddingVaccines
+package com.example.vaccinationapp.VaccineControl
 
 import android.os.Bundle
 import android.widget.Button

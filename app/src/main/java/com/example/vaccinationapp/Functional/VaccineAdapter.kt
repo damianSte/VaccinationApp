@@ -35,7 +35,7 @@ class VaccineAdapter(private val vaccineList: MutableList<VaccineDataClass>) :
         fun bind(vaccine: VaccineDataClass) {
             nameText.text = vaccine.name
             manufacturerText.text = " • Manufacturer: ${vaccine.manufacturer}"
-            lastDoseText.text = " • Last dose: ${vaccine.lastDose}"
+            lastDoseText.text = " • Date: ${vaccine.lastDose}"
         }
     }
 

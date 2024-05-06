@@ -2,6 +2,7 @@ package com.example.vaccinationapp.phpAdmin
 
 import com.example.vaccinationapp.phpAdmin.DataClasses.AddVaccineDataClass
 import com.example.vaccinationapp.phpAdmin.DataClasses.SignUpDataClass
+import com.example.vaccinationapp.phpAdmin.DataClasses.UserProfileDataClass
 import com.example.vaccinationapp.phpAdmin.DataClasses.VaccineDataClass
 import java.sql.Connection
 import java.sql.SQLException
@@ -155,16 +156,14 @@ class DBQueries(private val connection: Connection) : DbUser {
 
     }
 
-    fun getVaccineFuture(userId: String): List<VaccineDataClass> {
+    fun getVaccineFuture(userId: String, currentTime: String): List<VaccineDataClass> {
         val vaccineList = mutableListOf<VaccineDataClass>()
 
         try {
             val call = "{CALL getVaccineFuture(?, ?)}"
             val statement = connection.prepareCall(call)
             statement.setString(1, userId)
-
-            val currentDate = java.sql.Date(System.currentTimeMillis())
-            statement.setDate(2, currentDate)
+            statement.setString(2, currentTime)
 
             val resultSet = statement.executeQuery()
 
@@ -186,5 +185,36 @@ class DBQueries(private val connection: Connection) : DbUser {
         return vaccineList
     }
 
+    fun getAppointmentTime(userId: String): String {
+
+        val call = "{CALL getAppointmentTime(?, ?)}"
+        val statement = connection.prepareCall(call)
+        statement.setString(1, userId)
+
+        val currentDate = java.sql.Date(System.currentTimeMillis())
+        statement.setDate(2, currentDate)
+
+        val resultSet = statement.executeQuery()
+
+        return resultSet.getString("hour")
+    }
+
+    fun insertProfile(userProfile: UserProfileDataClass): Boolean{
+
+        val call = "{CALL insertProfile(?,?,?,?,?)}"
+        val statement = connection.prepareCall(call)
+
+        statement.setString(1, userProfile.userId)
+        statement.setString(2, userProfile.pesel)
+        statement.setString(3, userProfile.phoneNumber)
+        statement.setString(4, userProfile.dateOfBirth)
+        statement.setString(5, userProfile.name)
+
+        val result = !statement.execute()
+
+        statement.close()
+
+        return result
+    }
 
 }

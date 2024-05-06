@@ -16,6 +16,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.sql.Date
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class MainActivity : BarHandler() {
 
@@ -84,12 +87,15 @@ class MainActivity : BarHandler() {
     private fun getVaccineScheduled() {
         val userId = UserData.getUserId()
 
+        // Get current time in HH:mm format
+        val currentTime = SimpleDateFormat("HH:mm", Locale.getDefault()).format(java.util.Date())
+
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 val connection = DBConnection.getConnection()
                 val dbQueries = DBQueries(connection)
 
-                val userVaccineHistory = userId?.let { dbQueries.getVaccineFuture(it) }
+                val userVaccineHistory = userId?.let { dbQueries.getVaccineFuture(it, currentTime) }
                 connection.close()
 
                 // Update UI with the fetched vaccine history
@@ -104,5 +110,6 @@ class MainActivity : BarHandler() {
             }
         }
     }
+
 
 }
