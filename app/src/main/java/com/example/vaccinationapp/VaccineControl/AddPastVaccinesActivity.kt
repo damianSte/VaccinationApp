@@ -22,12 +22,25 @@ import java.sql.Date
 import java.util.Calendar
 import java.util.UUID
 
+/**
+ * Activity class responsible for adding past vaccines to the database.
+ *
+ * This class facilitates the addition of past vaccines by allowing users to select a vaccine from a Spinner,
+ * choose a date, and submit the information to the database. The selected vaccine's ID, along with other
+ * relevant data, is stored in the database.
+ */
 class AddPastVaccinesActivity : BarHandler() {
 
+    // Views
+    // Spinner for selecting vaccine (name)
     private lateinit var vaccineName: Spinner
+    // EditText for selecting date
     private lateinit var date: EditText
+    // Button for adding to database
     private lateinit var updateButton: Button
-    private var selectedDateCalendar: Calendar = Calendar.getInstance() // Initialize Calendar
+
+    // Calendar for storing selected date
+    private var selectedDateCalendar: Calendar = Calendar.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,13 +48,12 @@ class AddPastVaccinesActivity : BarHandler() {
 
         openActivity(R.id.bottom_base)
 
-        // Initialize the Spinner
+        // Initialize Views
         vaccineName = findViewById(R.id.vaccine_choose)
-        // Initialize EditTexts Data, Hour
         date = findViewById(R.id.date_choose)
         updateButton = findViewById(R.id.addVaccine)
 
-        // Parse CSV and extract vaccine names with IDs
+        // Parse CSV and extract vaccine names
         val vaccineOptions = parseCSVAndExtractVaccineNames()
 
         // Extract vaccine names for display in the Spinner
@@ -55,10 +67,12 @@ class AddPastVaccinesActivity : BarHandler() {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         vaccineName.adapter = adapter
 
+        // Set click listener for date EditText
         date.setOnClickListener {
             showDatePicker()
         }
 
+        // Set click listener for update button
         updateButton.setOnClickListener {
             val selectedSqlDate = Date(selectedDateCalendar.timeInMillis)
             addVaccineToDatabase(selectedSqlDate)
@@ -75,14 +89,18 @@ class AddPastVaccinesActivity : BarHandler() {
                 // Perform action based on selection
                 val selectedVaccineName = vaccineNames[position]
                 val selectedVaccineID = vaccineIDs[position]
-                // Do something with the selected vaccine name and ID
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
-                // Do nothing
+
             }
         })
     }
+
+    /**
+     * parseCSVAndExtractVaccineNames parses CSV file containning vaccine information and extracts vaccine names
+     * @return A list of pairs containing vaccines IDs and names
+     */
 
     private fun parseCSVAndExtractVaccineNames(): List<Pair<String, String>> {
         val vaccineNames = mutableListOf<Pair<String, String>>()
@@ -126,6 +144,10 @@ class AddPastVaccinesActivity : BarHandler() {
         return vaccineNames
     }
 
+    /**
+     * Displays a DatePickerDialog  for selecting date
+     */
+
     private fun showDatePicker() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -134,7 +156,7 @@ class AddPastVaccinesActivity : BarHandler() {
 
         val datePickerDialog = DatePickerDialog(this,
             DatePickerDialog.OnDateSetListener { _, selectedYear, selectedMonth, selectedDay ->
-                // Adjust month +1 as months are zero-based in Calendar
+                // Adjust month +1 as months are zero in Calendar
                 selectedDateCalendar.set(selectedYear, selectedMonth, selectedDay)
                 val formattedDate =
                     String.format("%d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay)
@@ -146,6 +168,11 @@ class AddPastVaccinesActivity : BarHandler() {
 
         datePickerDialog.show()
     }
+
+    /**
+     * addVaccineToDatabase adds selected vaccine, data, and hour to database
+     * @param vaccineDate The date of the vaccine.
+     */
 
     @OptIn(DelicateCoroutinesApi::class)
     private fun addVaccineToDatabase(vaccineDate: Date) {
@@ -173,6 +200,12 @@ class AddPastVaccinesActivity : BarHandler() {
         }
     }
 
+    /**
+     * Retrieves the ID of the selected vaccine from the database.
+     *
+     * @param vaccineName The name of the selected vaccine.
+     * @return The ID of the selected vaccine.
+     */
     private fun addVaccineId(vaccineName: String): String? {
         return try {
             val connection = DBConnection.getConnection()
@@ -189,6 +222,11 @@ class AddPastVaccinesActivity : BarHandler() {
         }
     }
 
+    /**
+     * Generates a unique ID for the vaccine record.
+     *
+     * @return A unique ID for the vaccine record.
+     */
     private fun generateId(): String {
         return UUID.randomUUID().toString()
     }

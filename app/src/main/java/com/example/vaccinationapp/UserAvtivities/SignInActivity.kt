@@ -17,40 +17,57 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
+/**
+ * Activity for user sign-in
+ */
 class SignInActivity : HashClass() {
 
+    // Button to go to Sing up Activity
     private lateinit var goToSignUpButton: Button
+
+    // EditTExt for inputting Email
     private lateinit var inputEmail: EditText
+
+    // EditText fot inputting password
     private lateinit var inputPassword: EditText
+
+    // Button to log in into app
     private lateinit var logToApp: Button
+
+    // Button to skip log in activity
     private lateinit var breakLogToApp: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in)
 
-
+        // Initialize views
         goToSignUpButton = findViewById(R.id.go_to_sign_up_button)
         inputEmail = findViewById(R.id.email_edit)
         inputPassword = findViewById(R.id.password_edit)
         logToApp = findViewById(R.id.sign_in_button)
         breakLogToApp = findViewById(R.id.break_in_button)
 
-
+        // Set functions
         goToSignInActivity()
         logIntoApp()
         breakIntoApp()
 
 
-
     }
 
+    /**
+     * Sets up the click listener for the login button
+     */
     private fun logIntoApp() {
         logToApp.setOnClickListener {
             logInRegisteredUser()
         }
     }
 
+    /**
+     * Sets up the click listener for the skip login button
+     */
     private fun breakIntoApp() {
         breakLogToApp.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
@@ -58,6 +75,9 @@ class SignInActivity : HashClass() {
         }
     }
 
+    /**
+     * Sets up the click listener for the sign-up button
+     */
     private fun goToSignInActivity() {
         goToSignUpButton.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
@@ -65,29 +85,9 @@ class SignInActivity : HashClass() {
         }
     }
 
-    private fun validateLoginDetails(): Boolean {
-        // getting email and password trimming spaces
-        val email = inputEmail.text.toString().trim()
-        val password = inputPassword.text.toString().trim()
-
-        return when {
-            TextUtils.isEmpty(email) -> {
-                makeToast(resources.getString(R.string.wrong_log_in_email), true)
-                false
-            }
-
-            TextUtils.isEmpty(password) -> {
-                makeToast(resources.getString(R.string.wrong_log_in_password), true)
-                false
-            }
-
-            else -> {
-                true
-            }
-        }
-    }
-
-
+    /**
+     * Logs in a registered user.
+     */
     @OptIn(DelicateCoroutinesApi::class)
     private fun logInRegisteredUser() {
 
@@ -106,7 +106,7 @@ class SignInActivity : HashClass() {
                     openNextActivity()
                     sendId()
                 }
-                if(!userExists) {
+                if (!userExists) {
                     makeToast("User not found", false)
                 }
 
@@ -116,6 +116,9 @@ class SignInActivity : HashClass() {
         }
     }
 
+    /**
+     * Sends the user ID to UserData if login is successful
+     */
 
     private fun sendId() {
         val email = inputEmail.text.toString().trim()
@@ -140,12 +143,20 @@ class SignInActivity : HashClass() {
         }
     }
 
+    /**
+     * Opens the main Activity after successful login
+     */
     private fun openNextActivity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
 
-
+    /**
+     * Displays a toast message.
+     *
+     * @param toast the message to be displayed
+     * @param errorMessage flag indicating whether the message is an error message
+     */
     private fun makeToast(toast: String, errorMessage: Boolean) {
         Toast.makeText(this@SignInActivity, toast, Toast.LENGTH_LONG).show()
     }

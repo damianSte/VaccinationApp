@@ -10,8 +10,21 @@ import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+/**
+ * Class for handling Database queries related to user data
+ *
+ * @param connection  database connection
+ */
+
 open class DBQueries(private val connection: Connection) : DbUser {
 
+    /**
+     * Checks if a user exists in the database. Overrides DBUser
+     *
+     * @param email user's email.
+     * @param password user's password
+     * @return True(1) if user exists, false otherwise
+     */
     override fun userExists(email: String, password: String): Boolean {
         val query = "CALL getUser(?, ?)"
         val callableStatement = connection.prepareCall(query)
@@ -24,6 +37,12 @@ open class DBQueries(private val connection: Connection) : DbUser {
         return count > 0
     }
 
+    /**
+     * Inserts a new user into Database
+     *
+     * @param user user data (Sign up data class)
+     * @return True, if  user was successfully inserted false otherwise
+     */
     override fun insertUser(user: SignUpDataClass): Boolean {
 
         val call = "{CALL insertUser(?,?,?)}"
@@ -38,14 +57,12 @@ open class DBQueries(private val connection: Connection) : DbUser {
         return result
     }
 
-//    private fun mapResultSetToLogInDataClass(resultSet: ResultSet):
-//            LogInDataClass? {
-//        return LogInDataClass(
-//            email = resultSet.getString("email"),
-//            password = resultSet.getString("password")
-//        )
-//    }
-
+    /**
+     * Inserts a new vaccine Record into the database
+     *
+     * @param vaccine vaccine data AddVaccineDataClass
+     * @return True if vaccine record was successfully inserted false otherwise
+     */
     override fun insertVaccine(vaccine: AddVaccineDataClass): Boolean {
 
         val call = "{CALL insertVaccine(?,?,?,?,?)}"
@@ -61,7 +78,12 @@ open class DBQueries(private val connection: Connection) : DbUser {
         statement.close()
         return result
     }
-
+    /**
+     * Retrieves the user ID associated with the given email
+     *
+     * @param email  user's email
+     * @return user Id if found, null otherwise
+     */
     fun getUserId(email: String): String? {
         val call = "{CALL getUserId(?)}"
         val statement = connection.prepareCall(call)
@@ -78,6 +100,13 @@ open class DBQueries(private val connection: Connection) : DbUser {
 
         return userId
     }
+
+    /**
+     * Retrieves the vaccine ID associated with given vaccine name
+     *
+     * @param vaccineName the name of the vaccine.
+     * @return  vaccine ID if found, null otherwise
+     */
 
     fun getVaccineId(vaccineName: String): String? {
         val call = "{CALL getVaccineId(?)}"
@@ -96,6 +125,12 @@ open class DBQueries(private val connection: Connection) : DbUser {
         return vaccineID
     }
 
+    /**
+     * Retrieves  vaccine history for a specific user
+     *
+     * @param userId  ID of the user
+     * @return A list of VaccineDataClass objects representing  Vaccine history.
+     */
     fun getVaccineHistory(userId: String): List<VaccineDataClass> {
         val vaccineList = mutableListOf<VaccineDataClass>()
 
@@ -129,7 +164,12 @@ open class DBQueries(private val connection: Connection) : DbUser {
         return vaccineList
     }
 
-
+    /**
+     * Retrieves vaccine history for a specific user showing only the most recent dose of each vaccine
+     *
+     * @param userId the ID of the user
+     * @return A list of VaccineDataClass objects representing vaccine history.
+     */
     fun getOneVaccineHistory(userId: String): List<VaccineDataClass> {
 
         val vaccineList = mutableListOf<VaccineDataClass>()
@@ -162,6 +202,13 @@ open class DBQueries(private val connection: Connection) : DbUser {
 
     }
 
+    /**
+     * Retrieves upcoming Vaccine Appointments for a specific user
+     *
+     * @param userId  ID of the user
+     * @param currentTime the current time in HH:mm format
+     * @return list of VaccineDataClass objects representing   upcoming appointments
+     */
     fun getVaccineFuture(userId: String, currentTime: String): List<VaccineDataClass> {
         val vaccineList = mutableListOf<VaccineDataClass>()
 
@@ -217,7 +264,12 @@ open class DBQueries(private val connection: Connection) : DbUser {
         return arrayOf(appointmentDate, appointmentTime)
     }
 
-
+    /**
+     * Insert the user profile data into the Database.
+     *
+     * @param profile the user profile data
+     * @return true if the profile data was successfully inserted false otherwise
+     */
     override fun insertProfile(profile: UserProfileDataClass): Boolean{
 
         val call = "{CALL insertProfile(?,?,?,?,?)}"

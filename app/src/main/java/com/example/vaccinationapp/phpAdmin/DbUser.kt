@@ -4,6 +4,9 @@ import com.example.vaccinationapp.phpAdmin.DataClasses.AddVaccineDataClass
 import com.example.vaccinationapp.phpAdmin.DataClasses.SignUpDataClass
 import com.example.vaccinationapp.phpAdmin.DataClasses.UserProfileDataClass
 
+/**
+ * Interface binding data classes
+ */
 interface DbUser {
 
     fun insertUser(user: SignUpDataClass): Boolean
