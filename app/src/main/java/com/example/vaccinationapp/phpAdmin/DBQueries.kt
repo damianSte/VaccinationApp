@@ -6,8 +6,11 @@ import com.example.vaccinationapp.phpAdmin.DataClasses.UserProfileDataClass
 import com.example.vaccinationapp.phpAdmin.DataClasses.VaccineDataClass
 import java.sql.Connection
 import java.sql.SQLException
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import java.util.Locale
 
-class DBQueries(private val connection: Connection) : DbUser {
+open class DBQueries(private val connection: Connection) : DbUser {
 
     override fun userExists(email: String, password: String): Boolean {
         val query = "CALL getUser(?, ?)"
@@ -110,10 +113,13 @@ class DBQueries(private val connection: Connection) : DbUser {
                 val name = resultSet.getString("vaccine_name")
                 val manufacturer = resultSet.getString("manufacturer")
                 val lastDose = resultSet.getDate("date_of_vaccine")
+                val dosage = resultSet.getInt("dosage")
 
-                val vaccine = VaccineDataClass(name, manufacturer, lastDose)
+                val vaccine = VaccineDataClass(name, manufacturer, lastDose,null, dosage)
                 vaccineList.add(vaccine)
+
             }
+
         } catch (e: SQLException) {
             // Handle SQL exceptions
             e.printStackTrace()
@@ -185,30 +191,43 @@ class DBQueries(private val connection: Connection) : DbUser {
         return vaccineList
     }
 
-    fun getAppointmentTime(userId: String): String {
 
-        val call = "{CALL getAppointmentTime(?, ?)}"
+    fun getAppointmentTime(userId: String): Array<String>? {
+        val call = "{CALL getAppointmentTime(?)}"
         val statement = connection.prepareCall(call)
         statement.setString(1, userId)
 
-        val currentDate = java.sql.Date(System.currentTimeMillis())
-        statement.setDate(2, currentDate)
-
         val resultSet = statement.executeQuery()
 
-        return resultSet.getString("hour")
+        var appointmentDate: String? = null
+        var appointmentTime: String? = null
+
+        if (resultSet.next()) {
+            appointmentDate = resultSet.getString("date_of_vaccine")
+            appointmentTime = resultSet.getString("hour")
+        }
+
+        resultSet.close()
+        statement.close()
+
+        if (appointmentDate == null || appointmentTime == null) {
+            return null
+        }
+
+        return arrayOf(appointmentDate, appointmentTime)
     }
 
-    fun insertProfile(userProfile: UserProfileDataClass): Boolean{
+
+    override fun insertProfile(profile: UserProfileDataClass): Boolean{
 
         val call = "{CALL insertProfile(?,?,?,?,?)}"
         val statement = connection.prepareCall(call)
 
-        statement.setString(1, userProfile.userId)
-        statement.setString(2, userProfile.pesel)
-        statement.setString(3, userProfile.phoneNumber)
-        statement.setString(4, userProfile.dateOfBirth)
-        statement.setString(5, userProfile.name)
+        statement.setString(1, profile.userId)
+        statement.setString(2, profile.pesel)
+        statement.setString(3, profile.phoneNumber)
+        statement.setString(4, profile.dateOfBirth)
+        statement.setString(5, profile.name)
 
         val result = !statement.execute()
 
@@ -216,5 +235,6 @@ class DBQueries(private val connection: Connection) : DbUser {
 
         return result
     }
+
 
 }

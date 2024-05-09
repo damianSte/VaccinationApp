@@ -16,7 +16,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.sql.Date
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -27,7 +26,6 @@ class MainActivity : BarHandler() {
     private lateinit var recyclerViewScheduled: RecyclerView
     private lateinit var adapter: VaccineAdapter
     private lateinit var adapterScheduled: VaccineScheduledAdapter
-
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +55,7 @@ class MainActivity : BarHandler() {
         // Call the function to fetch vaccine history
         getVaccineHistory()
         getVaccineScheduled()
+
     }
 
     private fun getVaccineHistory() {

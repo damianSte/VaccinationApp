@@ -10,5 +10,6 @@ data class AddVaccineDataClass(
     val dateOfVaccine: Date? = null,
     val timeOfVaccine: String? = null
 
+
 )
 

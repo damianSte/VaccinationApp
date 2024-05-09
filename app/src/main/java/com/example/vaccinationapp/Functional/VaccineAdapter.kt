@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.vaccinationapp.phpAdmin.DataClasses.VaccineDataClass
 import com.example.vaccinationapp.R
 
-
 class VaccineAdapter(private val vaccineList: MutableList<VaccineDataClass>) :
     RecyclerView.Adapter<VaccineAdapter.VaccineViewHolder>() {
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VaccineViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -20,7 +20,9 @@ class VaccineAdapter(private val vaccineList: MutableList<VaccineDataClass>) :
 
     override fun onBindViewHolder(holder: VaccineViewHolder, position: Int) {
         val vaccine = vaccineList[position]
-        holder.bind(vaccine)
+        val sumsMap = calculateSumOfTakenVaccines(vaccineList)
+        val sumForThisType = sumsMap[vaccine.name] ?: 0 // Get the sum for this vaccine type, default to 0 if not found
+        holder.bind(vaccine, sumForThisType)
     }
 
     override fun getItemCount(): Int {
@@ -31,21 +33,30 @@ class VaccineAdapter(private val vaccineList: MutableList<VaccineDataClass>) :
         private val nameText: TextView = itemView.findViewById(R.id.name_text)
         private val manufacturerText: TextView = itemView.findViewById(R.id.manufacturer_text)
         private val lastDoseText: TextView = itemView.findViewById(R.id.last_dose_text)
+        private val dosage: TextView = itemView.findViewById(R.id.dosage)
+        private val sumOfTakenVaccinesText: TextView = itemView.findViewById(R.id.sum) // TextView to display the sum
 
-        fun bind(vaccine: VaccineDataClass) {
+        fun bind(vaccine: VaccineDataClass, sumOfTakenVaccines: Int) {
             nameText.text = vaccine.name
             manufacturerText.text = " • Manufacturer: ${vaccine.manufacturer}"
             lastDoseText.text = " • Date: ${vaccine.lastDose}"
+            dosage.text = " • Recommended Dosage: ${vaccine.dosage}"
+            sumOfTakenVaccinesText.text = " • Sum of Taken Vaccines: $sumOfTakenVaccines" // Display the sum
         }
     }
 
     fun setData(newData: List<VaccineDataClass>) {
-        // Clear previous data
         vaccineList.clear()
-        // Add new data
         vaccineList.addAll(newData)
-        // Notify adapter about data change
         notifyDataSetChanged()
     }
-}
 
+    fun calculateSumOfTakenVaccines(vaccineList: List<VaccineDataClass>): Map<String, Int> {
+        val vaccineCountMap = HashMap<String, Int>()
+        for (vaccine in vaccineList) {
+            val vaccineType = vaccine.name
+            vaccineCountMap[vaccineType] = (vaccineCountMap[vaccineType] ?: 0) + 1
+        }
+        return vaccineCountMap
+    }
+}

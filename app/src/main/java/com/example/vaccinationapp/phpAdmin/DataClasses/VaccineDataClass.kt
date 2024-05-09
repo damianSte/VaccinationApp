@@ -6,5 +6,6 @@ data class VaccineDataClass(
     val name: String,
     val manufacturer: String,
     val lastDose: Date,
-    val time: String? = null
+    val time:String? = null,
+    val dosage: Int? = null
 )

@@ -160,7 +160,7 @@ class AddVaccineActivity : BarHandler() {
     }
 
     private fun isValidTime(hourOfDay: Int): Boolean {
-        return hourOfDay in 8..17
+        return hourOfDay in 8..24
     }
 
 //    private fun openPopupActivity() {

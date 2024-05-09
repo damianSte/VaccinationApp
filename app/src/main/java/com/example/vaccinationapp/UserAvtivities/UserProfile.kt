@@ -15,9 +15,11 @@ import com.example.vaccinationapp.phpAdmin.DBQueries
 import com.example.vaccinationapp.phpAdmin.DataClasses.AddVaccineDataClass
 import com.example.vaccinationapp.phpAdmin.DataClasses.UserProfileDataClass
 import com.example.vaccinationapp.phpAdmin.UserData
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.sql.Date
 
 class UserProfile : BarHandler() {
 
@@ -44,6 +46,7 @@ class UserProfile : BarHandler() {
 
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun insertUserData() {
 
         val name = userName.text.toString()
@@ -70,4 +73,5 @@ class UserProfile : BarHandler() {
         }
 
     }
+
 }

@@ -1,6 +1,5 @@
-package com.example.vaccinationapp.Functional
+package com.example.vaccinationapp.Functional.Notifications
 
-import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.BroadcastReceiver
@@ -10,26 +9,33 @@ import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
 import com.example.vaccinationapp.R
+import android.Manifest
 
-class ReminderBroadcast : BroadcastReceiver() {
+public class ReminderBroadcast : BroadcastReceiver() {
+
     override fun onReceive(context: Context, intent: Intent) {
-        val notificationBuilder = NotificationCompat.Builder(context, "ChannelId")
+        var notificationBuilder = NotificationCompat.Builder(context, "ChannelId")
+        notificationBuilder
             .setSmallIcon(R.drawable.vaccine_12111387)
-            .setContentTitle("Vaccination App")
-            .setContentText("Vaccine Reminder")
+            .setContentTitle("Lotto Game")
+            .setContentText("Find Out Your Luck!!!")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
-        val manager = NotificationManagerCompat.from(context)
-        if (ContextCompat.checkSelfPermission(
+        val channel =
+            NotificationChannel("ChannelId", "ChannelId", NotificationManager.IMPORTANCE_DEFAULT)
+        NotificationManagerCompat.from(context).createNotificationChannel(channel)
+
+
+        val manager: NotificationManagerCompat = NotificationManagerCompat.from(context)
+        if (ActivityCompat.checkSelfPermission(
                 context,
-                Manifest.permission.SEND_SMS
+                Manifest.permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             return
         }
         manager.notify(200, notificationBuilder.build())
+
     }
 }
-
