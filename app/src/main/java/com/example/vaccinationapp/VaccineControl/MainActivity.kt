@@ -18,14 +18,25 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Locale
-
+/**
+ * Main activity responsible for displaying vaccine history and scheduled vaccines.
+ *
+ * This activity displays the user's vaccine history and scheduled vaccines using RecyclerViews.
+ */
 class MainActivity : BarHandler() {
 
-
+    // RecyclerView for displaying the most recent vaccine appointment
     private lateinit var recyclerView: RecyclerView
+    // RecyclerView for displaying all scheduled vaccine appointments
     private lateinit var recyclerViewScheduled: RecyclerView
+    // Adapter for one recent vaccine
     private lateinit var adapter: VaccineAdapter
+    // Adapter for scheduled vaccine appointments
     private lateinit var adapterScheduled: VaccineScheduledAdapter
+
+    /**
+     * Initialize the activity, RecycleView and fetches data from database
+     */
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,12 +62,15 @@ class MainActivity : BarHandler() {
         recyclerViewScheduled.adapter = adapterScheduled
 
 
-
-        // Call the function to fetch vaccine history
+        // Functions call to fetch vaccines from database
         getVaccineHistory()
         getVaccineScheduled()
 
     }
+
+    /**
+     * Fetches the user's vaccine history from the database and updates Ui
+     */
 
     private fun getVaccineHistory() {
         val userId = UserData.getUserId()
@@ -77,16 +91,19 @@ class MainActivity : BarHandler() {
                     }
                 }
             } catch (e: Exception) {
-                e.printStackTrace() // Consider handling this exception more gracefully
+                e.printStackTrace()
             }
         }
     }
 
+    /**
+     * Fetches the user's scheduled vaccine from the database and updates Ui
+     */
 
     private fun getVaccineScheduled() {
         val userId = UserData.getUserId()
 
-        // Get current time in HH:mm format
+
         val currentTime = SimpleDateFormat("HH:mm", Locale.getDefault()).format(java.util.Date())
 
         GlobalScope.launch(Dispatchers.IO) {
@@ -105,7 +122,7 @@ class MainActivity : BarHandler() {
                     }
                 }
             } catch (e: Exception) {
-                e.printStackTrace() // Consider handling this exception more gracefully
+                e.printStackTrace()
             }
         }
     }

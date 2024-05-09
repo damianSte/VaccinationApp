@@ -79,6 +79,11 @@ class AddVaccineActivity : BarHandler() {
         })
     }
 
+    /**
+     * parseCSVAndExtractVaccineNames parses CSV file containning vaccine information and extracts vaccine names
+     * @return A list of pairs containing vaccines IDs and names
+     */
+
     private fun parseCSVAndExtractVaccineNames(): List<Pair<String, String>> {
         val vaccineNames = mutableListOf<Pair<String, String>>()
         val csvData = """
@@ -122,6 +127,10 @@ class AddVaccineActivity : BarHandler() {
         return vaccineNames
     }
 
+    /**
+     * Displays a DatePickerDialog  for selecting date
+     */
+
     private fun showDatePicker() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -140,7 +149,9 @@ class AddVaccineActivity : BarHandler() {
         datePickerDialog.show()
     }
 
-
+    /**
+     * Displays a TimePickerDialog  for selecting time
+     */
     private fun showTimePicker() {
         val calendar = Calendar.getInstance()
         val hourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
@@ -159,19 +170,17 @@ class AddVaccineActivity : BarHandler() {
         timePickerDialog.show()
     }
 
+    /**
+     * isValidTime checking if time is valid
+     */
+
     private fun isValidTime(hourOfDay: Int): Boolean {
-        return hourOfDay in 8..24
+        return hourOfDay in 8..18
     }
 
-//    private fun openPopupActivity() {
-//        val intent = Intent(this, PopUpWindow::class.java).apply {
-//            putExtra("VACCINENAME", chooseVaccine.selectedItem.toString())
-//            putExtra("DATE", chooseDate.text.toString())
-//            putExtra("HOUR", chooseHour.text.toString())
-//        }
-//        startActivity(intent)
-//    }
-
+    /**
+     * Opening PopUpWindow Activity sending vlaues
+     */
     private fun openPopupActivity() {
         val selectedDate = chooseDate.text.toString()
         val dateParts = selectedDate.split("-")

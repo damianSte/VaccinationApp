@@ -16,9 +16,15 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ * Activity for displaying vaccine history.
+ */
+
 class VaccineHistoryActivity : BarHandler() {
 
+    // RecycleView for displaying Vaccine history
     private lateinit var recyclerView: RecyclerView
+    // Vaccine adapter for history RecycleView
     private lateinit var adapter: VaccineAdapter
 
     @SuppressLint("MissingInflatedId")
@@ -41,6 +47,9 @@ class VaccineHistoryActivity : BarHandler() {
         getVaccineHistory()
     }
 
+    /**
+     * Fetches the user's vaccine history from the database and updates the UI.
+     */
     private fun getVaccineHistory() {
         val userId = UserData.getUserId()
 
@@ -60,7 +69,7 @@ class VaccineHistoryActivity : BarHandler() {
                     }
                 }
             } catch (e: Exception) {
-                e.printStackTrace() // Consider handling this exception more gracefully
+                e.printStackTrace()
             }
         }
     }

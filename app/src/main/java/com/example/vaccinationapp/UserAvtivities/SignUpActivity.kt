@@ -21,20 +21,29 @@ import kotlinx.coroutines.launch
 
 import java.util.UUID
 
-
+/**
+ * Activity for user sign-up
+ */
 open class SignUpActivity : HashClass() {
 
+    // Button to navigate to sign n activity
     private lateinit var goToSignInButton: Button
+    // EditText for inputting Email
     private lateinit var registerEmail: EditText
+    // EditText for inputting password
     private lateinit var registerPassword: EditText
+    // EditText for repeating the password
     private lateinit var repeatPassword: EditText
+    // EditText fot inputting user name
     private lateinit var registerName: EditText
+    // Button to register new user
     private lateinit var registerButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
+        // Initializes views
         goToSignInButton = findViewById(R.id.go_to_sign_in_button)
         registerEmail = findViewById(R.id.email_edit)
         registerPassword = findViewById(R.id.password_edit)
@@ -42,12 +51,16 @@ open class SignUpActivity : HashClass() {
         registerName = findViewById(R.id.name_edit)
         registerButton = findViewById(R.id.sign_up_button)
 
+        // function set on click
         goToSignIn()
         registerNewUserButton()
 
 
     }
 
+    /**
+     * Sets up the click listener for the register button
+     */
     private fun registerNewUserButton() {
         registerButton.setOnClickListener {
             addUserToPhp()
@@ -56,6 +69,9 @@ open class SignUpActivity : HashClass() {
         }
     }
 
+    /**
+     * Sets up the click listener for the sign-in button
+     */
     private fun goToSignIn() {
         goToSignInButton.setOnClickListener {
             val intent = Intent(this, SignInActivity::class.java)
@@ -63,6 +79,9 @@ open class SignUpActivity : HashClass() {
         }
     }
 
+    /**
+     * Validates the registration data entered by User
+     */
     private fun registrationData(): Boolean {
         val email = registerEmail.text.toString().trim()
         val password = registerPassword.text.toString().trim()
@@ -100,7 +119,9 @@ open class SignUpActivity : HashClass() {
         }
     }
 
-
+    /**
+     * Adds a new user to the database.
+     */
     @OptIn(DelicateCoroutinesApi::class)
     private fun addUserToPhp() {
         val email: String = registerEmail.text.toString().trim()
@@ -134,21 +155,29 @@ open class SignUpActivity : HashClass() {
         }
     }
 
+    /**
+     * Validates the email format
+     */
     private fun validateEmail(email: String): Boolean {
         val emailPatter = Patterns.EMAIL_ADDRESS
         return emailPatter.matcher(email).matches()
     }
 
+
     private fun generateUserId(): String {
         return UUID.randomUUID().toString()
     }
 
+    /**
+     * Generates a unique user ID.
+     */
     private fun userRegistrationSuccess() {
         Toast.makeText(
             this@SignUpActivity, resources.getString(R.string.register_success),
             Toast.LENGTH_LONG
         ).show()
     }
+
 
     private fun makeToast(toast: String, errorMessage: Boolean) {
         Toast.makeText(this@SignUpActivity, toast, Toast.LENGTH_LONG).show()

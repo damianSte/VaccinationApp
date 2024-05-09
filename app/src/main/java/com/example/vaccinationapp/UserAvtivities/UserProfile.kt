@@ -23,10 +23,15 @@ import java.sql.Date
 
 class UserProfile : BarHandler() {
 
+    // EditText for user name
     private lateinit var userName: EditText
+    // EditText for pesel number: type Number
     private lateinit var userPesel: EditText
+    // EditText for inputting the phone number
     private lateinit var userPhoneNumber: EditText
+    // EditText for inputting the phone number
     private lateinit var userDateOfBirth: EditText
+    // Button for saving data in Database
     private lateinit var saveButton: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +50,10 @@ class UserProfile : BarHandler() {
         }
 
     }
+
+    /**
+     * Inserts data to Database
+     */
 
     @OptIn(DelicateCoroutinesApi::class)
     private fun insertUserData() {
