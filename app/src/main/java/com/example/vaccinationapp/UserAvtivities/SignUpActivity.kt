@@ -12,7 +12,7 @@ import com.example.vaccinationapp.R
 
 import com.example.vaccinationapp.phpAdmin.DBConnection
 import com.example.vaccinationapp.phpAdmin.DBQueries
-import com.example.vaccinationapp.phpAdmin.SignUpDataClass
+import com.example.vaccinationapp.phpAdmin.DataClasses.SignUpDataClass
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 import kotlinx.coroutines.Dispatchers

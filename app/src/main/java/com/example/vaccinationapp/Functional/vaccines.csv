@@ -1,26 +1,26 @@
-vaccine,manufacturer
-Adenovirus,Barr Labs Inc.
-Anthrax,Emergent BioSolutions
-Cholera,PaxVax
-COVID-19,Pfizer
-Dengue,ModernaTx
-DTaP,Sanofi
-DT,Sanofi
-Haemophilus influenzae type b (Hib),GlaxoSmithKline
-Hepatitis A,Merck
-Hepatitis B,Merck
-Herpes Zoster (Shingles),GlaxoSmithKline
-Human Papillomavirus (HPV),Merck
-Influenza,Seqirus
-Japanese encephalitis,Valneva
-Measles; Mumps; Rubella,Merck
-Meningococcal,Sanofi
-Pneumococcal,Pfizer
-Polio,Sanofi
-Rabies,GlaxoSmithKline
-Rotavirus,Merck
-Tetanus;(reduced) Diphtheria,Massachusetts Biological Labs
-Typhoid,PaxVax
-Varicella,Merck
-Vaccinia (Smallpox),Sanofi
-Yellow Fever,Sanofi
+id,vaccine,manufacturer, next doses,
+001,Adenovirus,Barr Labs Inc., 1
+002,Anthrax,Emergent BioSolutions,3
+003,Cholera,PaxVax, 1
+004,COVID-19,Pfizer, 2
+005,Dengue,ModernaTx, 3
+006,DTaP,Sanofi, 5
+007,DT,Sanofi, 5
+008,Haemophilus influenzae type b (Hib),GlaxoSmithKline, 4
+009,Hepatitis A,Merck, 2
+010,Hepatitis B,Merck, 3
+011,Herpes Zoster (Shingles),GlaxoSmithKline,2
+012,Human Papillomavirus (HPV),Merck, 2 or 3
+013,Influenza,Seqirus, 1 or 2
+014,Japanese encephalitis,Valneva, 2
+015,Measles; Mumps; Rubella,Merck, 2
+016,Meningococcal,Sanofi, 2
+017,Pneumococcal,Pfizer, 4
+018,Polio,Sanofi, 4
+019,Rabies,GlaxoSmithKline, 3
+020,Rotavirus,Merck, 3
+021,Tetanus;(reduced) Diphtheria,Massachusetts Biological Labs, 1
+022,Typhoid,PaxVax, 4
+023,Varicella,Merck, 2
+024,Vaccinia (Smallpox),Sanofi, 1
+025,Yellow Fever,Sanofi, 1

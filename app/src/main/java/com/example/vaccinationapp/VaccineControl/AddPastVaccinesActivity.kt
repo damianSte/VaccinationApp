@@ -1,41 +1,45 @@
 package com.example.vaccinationapp.VaccineControl
 
 import android.app.DatePickerDialog
-import android.app.TimePickerDialog
-import android.content.Intent
-import android.icu.util.Calendar
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
-import android.widget.Spinner
-import com.example.vaccinationapp.R
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
+import android.widget.Spinner
 import com.example.vaccinationapp.Functional.BarHandler
+import com.example.vaccinationapp.R
+import com.example.vaccinationapp.phpAdmin.DBConnection
+import com.example.vaccinationapp.phpAdmin.DBQueries
+import com.example.vaccinationapp.phpAdmin.DataClasses.AddVaccineDataClass
+import com.example.vaccinationapp.phpAdmin.UserData
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.sql.Date
+import java.util.Calendar
+import java.util.UUID
 
-class AddVaccineActivity : BarHandler() {
+class AddPastVaccinesActivity : BarHandler() {
 
-    lateinit var chooseVaccine: Spinner
-    lateinit var chooseDate: EditText
-    lateinit var chooseHour: EditText
+    private lateinit var vaccineName: Spinner
+    private lateinit var date: EditText
+    private lateinit var updateButton: Button
+    private var selectedDateCalendar: Calendar = Calendar.getInstance() // Initialize Calendar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_vaccine)
+        setContentView(R.layout.activity_add_past_vaccines)
 
-
-        openActivity(R.id.bottom_add)
+        openActivity(R.id.bottom_base)
 
         // Initialize the Spinner
-        chooseVaccine = findViewById(R.id.vaccine_choose)
-
+        vaccineName = findViewById(R.id.vaccine_choose)
         // Initialize EditTexts Data, Hour
-        chooseDate = findViewById(R.id.date_choose)
-        chooseHour = findViewById(R.id.hour_choose)
-
-        val selectDateButton = findViewById<Button>(R.id.selectDate)
+        date = findViewById(R.id.date_choose)
+        updateButton = findViewById(R.id.addVaccine)
 
         // Parse CSV and extract vaccine names with IDs
         val vaccineOptions = parseCSVAndExtractVaccineNames()
@@ -49,24 +53,25 @@ class AddVaccineActivity : BarHandler() {
         // Populate the Spinner with vaccine options
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, vaccineNames)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        chooseVaccine.adapter = adapter
+        vaccineName.adapter = adapter
 
-        selectDateButton.setOnClickListener {
-            openPopupActivity()
-        }
-
-        // Set OnClickListener to show date picker dialog
-        chooseDate.setOnClickListener {
+        date.setOnClickListener {
             showDatePicker()
         }
 
-        chooseHour.setOnClickListener {
-            showTimePicker()
+        updateButton.setOnClickListener {
+            val selectedSqlDate = Date(selectedDateCalendar.timeInMillis)
+            addVaccineToDatabase(selectedSqlDate)
         }
 
         // Optionally handle selection events
-        chooseVaccine.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+        vaccineName.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 // Perform action based on selection
                 val selectedVaccineName = vaccineNames[position]
                 val selectedVaccineID = vaccineIDs[position]
@@ -108,7 +113,6 @@ class AddVaccineActivity : BarHandler() {
 023,Varicella,Merck, 2
 024,Vaccinia (Smallpox),Sanofi, 1
 025,Yellow Fever,Sanofi, 1
-
         """.trimIndent()
         val lines = csvData.split("\n")
         for (line in lines) {
@@ -131,67 +135,61 @@ class AddVaccineActivity : BarHandler() {
         val datePickerDialog = DatePickerDialog(this,
             DatePickerDialog.OnDateSetListener { _, selectedYear, selectedMonth, selectedDay ->
                 // Adjust month +1 as months are zero-based in Calendar
-                val formattedDate = String.format("%d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay)
-                chooseDate.setText(formattedDate)
-            }, year, month, dayOfMonth)
+                selectedDateCalendar.set(selectedYear, selectedMonth, selectedDay)
+                val formattedDate =
+                    String.format("%d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay)
+                date.setText(formattedDate)
+            }, year, month, dayOfMonth
+        )
 
-        datePickerDialog.datePicker.minDate = System.currentTimeMillis()
+        datePickerDialog.datePicker.maxDate = System.currentTimeMillis()
 
         datePickerDialog.show()
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun addVaccineToDatabase(vaccineDate: Date) {
+        val name = vaccineName.selectedItem.toString()
 
-    private fun showTimePicker() {
-        val calendar = Calendar.getInstance()
-        val hourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
-        val timePickerDialog = TimePickerDialog(this,
-            TimePickerDialog.OnTimeSetListener { _, selectedHourOfDay, selectedMinute ->
-                if (isValidTime(selectedHourOfDay)) {
-                    val formattedTime = String.format("%02d:%02d", selectedHourOfDay, selectedMinute)
-                    chooseHour.setText(formattedTime)
-                } else {
-                    Toast.makeText(this, "Please select a time between 8 AM and 5 PM", Toast.LENGTH_SHORT).show()
-                    showTimePicker()
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val vaccineId = addVaccineId(name)
+                val vaccineRecordId = generateId()
+                val userId = UserData.getUserId()
+
+                if (vaccineId != null) {
+                    val connection = DBConnection.getConnection()
+                    val dbQueries = DBQueries(connection)
+
+                    val newVaccine =
+                        AddVaccineDataClass(vaccineId, vaccineRecordId, userId, vaccineDate, null)
+                    dbQueries.insertVaccine(newVaccine)
+
+                    connection.close()
                 }
-            }, hourOfDay, minute, true)
-
-        timePickerDialog.show()
-    }
-
-    private fun isValidTime(hourOfDay: Int): Boolean {
-        return hourOfDay in 8..24
-    }
-
-//    private fun openPopupActivity() {
-//        val intent = Intent(this, PopUpWindow::class.java).apply {
-//            putExtra("VACCINENAME", chooseVaccine.selectedItem.toString())
-//            putExtra("DATE", chooseDate.text.toString())
-//            putExtra("HOUR", chooseHour.text.toString())
-//        }
-//        startActivity(intent)
-//    }
-
-    private fun openPopupActivity() {
-        val selectedDate = chooseDate.text.toString()
-        val dateParts = selectedDate.split("-")
-        val year = dateParts[0].toInt()
-        val month = dateParts[1].toInt() - 1 // Adjust month to zero-based
-        val day = dateParts[2].toInt()
-
-        val selectedDateCalendar = Calendar.getInstance()
-        selectedDateCalendar.set(year, month, day)
-
-        val selectedSqlDate = java.sql.Date(selectedDateCalendar.timeInMillis)
-
-        val intent = Intent(this, PopUpWindow::class.java).apply {
-            putExtra("VACCINENAME", chooseVaccine.selectedItem.toString())
-            putExtra("DATE", selectedSqlDate)
-            putExtra("HOUR", chooseHour.text.toString())
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
-        startActivity(intent)
     }
 
+    private fun addVaccineId(vaccineName: String): String? {
+        return try {
+            val connection = DBConnection.getConnection()
+            val dbQueries = DBQueries(connection)
 
+            val vaccineId = dbQueries.getVaccineId(vaccineName)
+
+            connection.close()
+
+            vaccineId
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    private fun generateId(): String {
+        return UUID.randomUUID().toString()
+    }
 }
-

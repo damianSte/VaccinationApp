@@ -1,11 +1,12 @@
 package com.example.vaccinationapp.Functional
 
 import android.content.Intent
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.vaccinationapp.R
+import com.example.vaccinationapp.VaccineControl.AddPastVaccinesActivity
 import com.example.vaccinationapp.VaccineControl.AddVaccineActivity
 import com.example.vaccinationapp.VaccineControl.MainActivity
+import com.example.vaccinationapp.UserAvtivities.UserProfile
 import com.example.vaccinationapp.VaccineControl.VaccineHistoryActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -32,6 +33,18 @@ open class BarHandler : AppCompatActivity() {
 
                 R.id.bottom_history -> {
                     val intent = Intent(this, VaccineHistoryActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+
+                R.id.bottom_profile -> {
+                    val intent = Intent(this, UserProfile::class.java)
+                    startActivity(intent)
+                    true
+                }
+
+                R.id.bottom_base -> {
+                    val intent = Intent(this, AddPastVaccinesActivity::class.java)
                     startActivity(intent)
                     true
                 }

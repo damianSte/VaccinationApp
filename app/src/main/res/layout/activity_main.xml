@@ -16,10 +16,10 @@
         android:fontFamily="@font/poppins_regular"
         android:gravity="start|center"
         android:padding="5dp"
-        android:text="Schedule a vaccine"
+        android:text="Scheduled vaccinations"
         android:textColor="?attr/colorOnPrimary"
         android:textFontWeight="600"
-        android:textSize="30sp"
+        android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -27,19 +27,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-        android:id="@+id/vaccine_name_edit"
-        android:layout_width="350dp"
-        android:layout_height="50dp"
-        android:background="@drawable/button_background"
-        android:backgroundTint="?attr/colorPrimary"
-        android:backgroundTintMode="multiply"
-        android:fontFamily="@font/poppins_regular"
-        android:hint="Vaccine name"
-        android:inputType="text"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:textSize="15sp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/vaccineScheduledRecycleView"
+        android:layout_width="362dp"
+        android:layout_height="257dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -57,9 +48,9 @@
         android:backgroundTint="?attr/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vaccine_name_edit"
+        app:layout_constraintTop_toBottomOf="@+id/vaccineScheduledRecycleView"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
@@ -71,35 +62,16 @@
         android:fontFamily="@font/poppins_regular"
         android:gravity="start|center"
         android:padding="5dp"
-        android:text="Past Vaccines"
+        android:text="Recent Vaccination"
         android:textColor="?attr/colorOnPrimary"
         android:textFontWeight="600"
-        android:textSize="30sp"
+        android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider"
         app:layout_constraintVertical_bias="0.0" />
-
-    <ScrollView
-        android:id="@+id/past_vaccines_scroll"
-        android:layout_width="381dp"
-        android:layout_height="426dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/past_vaccines_text"
-        app:layout_constraintVertical_bias="0.0">
-
-        <!-- recycle view of past vaccine tiles -->
-        <include layout="@layout/vaccine_tile_layout" />
-
-    </ScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationBar"
@@ -116,6 +88,17 @@
         app:menu="@menu/bottom_menu"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="1dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/vaccinesRecycleView"
+        android:layout_width="367dp"
+        android:layout_height="254dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.636"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/past_vaccines_text"
+        app:layout_constraintVertical_bias="0.466" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

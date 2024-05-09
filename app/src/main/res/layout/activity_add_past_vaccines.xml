@@ -5,22 +5,22 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".VaccineControl.AddVaccineActivity">
-
+    tools:context=".VaccineControl.AddPastVaccinesActivity">
 
     <Button
-        android:id="@+id/selectDate"
+        android:id="@+id/addVaccine"
         android:layout_width="192dp"
         android:layout_height="69dp"
+        android:layout_marginBottom="80dp"
         android:fontFamily="@font/poppins_regular"
-        android:text="Select Date"
+        android:text="Add Vaccine"
         android:textSize="19sp"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hour_choose"
-        app:layout_constraintVertical_bias="0.643" />
+        app:layout_constraintTop_toBottomOf="@+id/date_choose"
+        app:layout_constraintVertical_bias="0.751" />
 
     <EditText
         android:id="@+id/date_choose"
@@ -51,7 +51,7 @@
         android:fontFamily="@font/poppins_regular"
         android:gravity="start|center"
         android:padding="5dp"
-        android:text="Schedule an Appointment"
+        android:text="Update your Vaccine History"
         android:textColor="?attr/colorOnPrimary"
         android:textFontWeight="600"
         android:textSize="28sp"
@@ -79,7 +79,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/schedule_text"
+        app:layout_constraintTop_toBottomOf="@+id/textView6"
         app:layout_constraintVertical_bias="1.0" />
 
     <TextView
@@ -87,7 +87,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/poppins_regular"
         android:gravity="start|center"
         android:padding="5dp"
@@ -97,28 +97,9 @@
         android:textFontWeight="600"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/vaccine_choose" />
-
-    <TextView
-        android:id="@+id/hour_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="28dp"
-        android:fontFamily="@font/poppins_regular"
-        android:gravity="start|center"
-        android:padding="5dp"
-        android:paddingStart="25dp"
-        android:text="Choose Hour"
-        android:textColor="?attr/colorOnPrimary"
-        android:textFontWeight="600"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_choose" />
 
     <Spinner
         android:id="@+id/vaccine_choose"
@@ -136,27 +117,7 @@
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/schedule_text"
-        app:layout_constraintVertical_bias="0.222" />
-
-    <EditText
-        android:id="@+id/hour_choose"
-        android:layout_width="350dp"
-        android:layout_height="50dp"
-        android:background="@drawable/button_background"
-        android:backgroundTint="?attr/colorPrimary"
-        android:backgroundTintMode="multiply"
-        android:clickable="true"
-        android:focusable="false"
-        android:fontFamily="@font/poppins_regular"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hour_text"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.432" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationBar"
@@ -180,6 +141,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="20dp" />
+        app:layout_constraintGuide_end="711dp" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="348dp"
+        android:layout_height="76dp"
+        android:fontFamily="@font/poppins_regular"
+        android:text="Add your past Vaccines and Update History of your Vaccination"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.253"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/schedule_text"
+        app:layout_constraintVertical_bias="0.057" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
