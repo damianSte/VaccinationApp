@@ -2,7 +2,6 @@ package com.example.vaccinationapp.UserAvtivities
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -105,6 +104,7 @@ class SignInActivity : HashClass() {
                 if (userExists) {
                     openNextActivity()
                     sendId()
+                    getUserProfileValues()
                 }
                 if (!userExists) {
                     makeToast("User not found", false)
@@ -161,5 +161,24 @@ class SignInActivity : HashClass() {
         Toast.makeText(this@SignInActivity, toast, Toast.LENGTH_LONG).show()
     }
 
+    private fun getUserProfileValues() {
+        val  userId =  UserData.getUserId()
+
+        try {
+            val connection = DBConnection.getConnection()
+
+            val dbQueries = DBQueries(connection)
+
+            if (userId != null) {
+                dbQueries.getUserProfile(userId)
+
+                connection.close()
+
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
 
 }

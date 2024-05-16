@@ -199,6 +199,11 @@ class AddVaccineActivity : BarHandler() {
             putExtra("HOUR", chooseHour.text.toString())
         }
         startActivity(intent)
+
+        chooseVaccine.setSelection(0)
+        chooseDate.text.clear()
+        chooseHour.text.clear()
+
     }
 
 

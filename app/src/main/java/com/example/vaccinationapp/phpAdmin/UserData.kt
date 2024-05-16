@@ -6,6 +6,8 @@ package com.example.vaccinationapp.phpAdmin
 object UserData {
     private var userId: String? = null
 
+
+    // Getter and Setter for userId
     fun getUserId(): String? {
         return userId
     }
@@ -13,4 +15,6 @@ object UserData {
     fun setUserId(userId: String) {
         this.userId = userId
     }
+
+
 }

@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
+import android.widget.Toast
 import com.example.vaccinationapp.Functional.BarHandler
 import com.example.vaccinationapp.R
 import com.example.vaccinationapp.phpAdmin.DBConnection
@@ -76,6 +77,9 @@ class AddPastVaccinesActivity : BarHandler() {
         updateButton.setOnClickListener {
             val selectedSqlDate = Date(selectedDateCalendar.timeInMillis)
             addVaccineToDatabase(selectedSqlDate)
+            vaccineName.setSelection(0)
+            date.text.clear()
+            makeToast("Vaccine has been added", false)
         }
 
         // Optionally handle selection events
@@ -229,5 +233,9 @@ class AddPastVaccinesActivity : BarHandler() {
      */
     private fun generateId(): String {
         return UUID.randomUUID().toString()
+    }
+
+    private fun makeToast(toast: String, errorMessage: Boolean) {
+        Toast.makeText(this@AddPastVaccinesActivity, toast, Toast.LENGTH_LONG).show()
     }
 }

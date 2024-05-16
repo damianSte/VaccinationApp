@@ -1,6 +1,7 @@
 package com.example.vaccinationapp.UserAvtivities
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
@@ -14,6 +15,7 @@ import com.example.vaccinationapp.phpAdmin.DBConnection
 import com.example.vaccinationapp.phpAdmin.DBQueries
 import com.example.vaccinationapp.phpAdmin.DataClasses.AddVaccineDataClass
 import com.example.vaccinationapp.phpAdmin.DataClasses.UserProfileDataClass
+import com.example.vaccinationapp.phpAdmin.ProfileData
 import com.example.vaccinationapp.phpAdmin.UserData
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -44,6 +46,12 @@ class UserProfile : BarHandler() {
         userPhoneNumber = findViewById(R.id.editTextPhone)
         userDateOfBirth = findViewById(R.id.editTextBirth)
         saveButton = findViewById(R.id.buttonSaveProfile)
+
+        userName.hint = ProfileData.getUserName()
+        userPesel.hint = ProfileData.getUserPesel()
+        userPhoneNumber.hint = ProfileData.getUserNumber()
+        userDateOfBirth.hint = ProfileData.getUserDoB()
+
 
         saveButton.setOnClickListener {
             insertUserData()
@@ -82,5 +90,6 @@ class UserProfile : BarHandler() {
         }
 
     }
+
 
 }
