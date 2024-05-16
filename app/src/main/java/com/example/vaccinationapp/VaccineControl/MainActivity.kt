@@ -61,10 +61,10 @@ class MainActivity : BarHandler() {
         adapterScheduled = VaccineScheduledAdapter(vaccineScheduledList)
         recyclerViewScheduled.adapter = adapterScheduled
 
-
         // Functions call to fetch vaccines from database
         getVaccineHistory()
         getVaccineScheduled()
+
 
     }
 
@@ -126,6 +126,5 @@ class MainActivity : BarHandler() {
             }
         }
     }
-
 
 }

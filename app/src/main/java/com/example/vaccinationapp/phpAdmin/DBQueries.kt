@@ -6,9 +6,6 @@ import com.example.vaccinationapp.phpAdmin.DataClasses.UserProfileDataClass
 import com.example.vaccinationapp.phpAdmin.DataClasses.VaccineDataClass
 import java.sql.Connection
 import java.sql.SQLException
-import java.sql.Timestamp
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 /**
  * Class for handling Database queries related to user data
@@ -100,6 +97,38 @@ open class DBQueries(private val connection: Connection) : DbUser {
 
         return userId
     }
+
+
+    fun getUserProfile(userId: String?): UserProfileDataClass {
+        val call = "{CALL getUserProfile(?)}"
+        val statement = connection.prepareCall(call)
+        statement.setString(1, userId)
+        val resultSet = statement.executeQuery()
+
+        var userName: String? = null
+        var userPesel: String? = null
+        var userNumber: String? = null
+        var userDoB: String? = null
+
+
+        if (resultSet.next()) {
+            userName = resultSet.getString("name")
+            userPesel = resultSet.getString("pesel")
+            userNumber = resultSet.getString("phone_number")
+            userDoB = resultSet.getString("date_of_birth")
+        }
+
+        resultSet.close()
+        statement.close()
+
+        ProfileData.setUserName(userName ?: "")
+        ProfileData.setUserPesel(userPesel ?: "")
+        ProfileData.setUserNumber(userNumber ?: "")
+        ProfileData.setUserDoB(userDoB ?: "")
+
+        return UserProfileDataClass(null,userPesel,userNumber,userDoB,userName)
+    }
+
 
     /**
      * Retrieves the vaccine ID associated with given vaccine name

@@ -11,7 +11,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="241dp"
+        android:layout_height="307dp"
         android:layout_gravity="center"
         android:background="@drawable/tile_background">
 
@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="92dp"
             android:fontFamily="@font/poppins_regular"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -112,6 +112,17 @@
             app:layout_constraintTop_toBottomOf="@+id/last_dose_text"
             app:layout_constraintVertical_bias="0.0"
             tools:text="• next dose: 03/18/2024" />
+
+        <Button
+            android:id="@+id/delete"
+            android:layout_width="164dp"
+            android:layout_height="42dp"
+            android:text="DELETE"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sum"
+            app:layout_constraintVertical_bias="0.204" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

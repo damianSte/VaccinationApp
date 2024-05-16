@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.vaccinationapp.R
 import com.example.vaccinationapp.phpAdmin.DataClasses.AddVaccineDataClass
@@ -61,6 +62,7 @@ class PopUpWindow : AppCompatActivity() {
         // Set up click listener for confirm button
         confirmButton.setOnClickListener {
             addVaccineToDatabase(editTextDate)
+            makeToast("Appointment has been made", false)
         }
     }
 
@@ -124,6 +126,9 @@ class PopUpWindow : AppCompatActivity() {
      */
     private fun generateId(): String {
         return UUID.randomUUID().toString()
+    }
+    private fun makeToast(toast: String, errorMessage: Boolean) {
+        Toast.makeText(this@PopUpWindow, toast, Toast.LENGTH_LONG).show()
     }
 
 }

@@ -1,22 +1,14 @@
 package com.example.vaccinationapp.phpAdmin
 
-import com.example.vaccinationapp.phpAdmin.DataClasses.AddVaccineDataClass
-import com.example.vaccinationapp.phpAdmin.DataClasses.UserProfileDataClass
 import java.security.MessageDigest
-import java.sql.SQLException
 import java.util.UUID
 
 fun main() {
 
-    val id = "00403d88-a5eb-46bb-bdba-eaa9d30c1972"
 
-    val connection = DBConnection.getConnection()
-    val dbQueries = DBQueries(connection)
+    getUserProfileValues()
 
-    dbQueries.getVaccineHistory(id)
-
-
-    connection.close()
+    println(ProfileData.getUserName())
 
 }
 
@@ -34,3 +26,24 @@ fun ByteArray.toHexString(): String {
 private fun generateUserId(): String {
     return UUID.randomUUID().toString()
 }
+
+
+private fun getUserProfileValues() {
+    val userId = "00403d88-a5eb-46bb-bdba-eaa9d30c1972"
+
+
+    try {
+        val connection = DBConnection.getConnection()
+
+        val dbQueries = DBQueries(connection)
+
+        if (userId != null) {
+            dbQueries.getUserProfile(userId)
+            connection.close()
+
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+}
+
