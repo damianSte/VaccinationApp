@@ -1,11 +1,10 @@
 package com.example.vaccinationapp.VaccineControl
 
-import com.example.vaccinationapp.Functional.VaccineAdapter
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vaccinationapp.Functional.BarHandler
+import com.example.vaccinationapp.Functional.VaccineAdapterHistory
 import com.example.vaccinationapp.R
 import com.example.vaccinationapp.phpAdmin.DBConnection
 import com.example.vaccinationapp.phpAdmin.DBQueries
@@ -16,18 +15,11 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-/**
- * Activity for displaying vaccine history.
- */
-
 class VaccineHistoryActivity : BarHandler() {
 
-    // RecycleView for displaying Vaccine history
     private lateinit var recyclerView: RecyclerView
-    // Vaccine adapter for history RecycleView
-    private lateinit var adapter: VaccineAdapter
+    private lateinit var adapter: VaccineAdapterHistory
 
-    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vaccine_history)
@@ -36,20 +28,15 @@ class VaccineHistoryActivity : BarHandler() {
         recyclerView = findViewById(R.id.vaccinesRecycleView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Initialize an empty list for vaccine history
         val vaccineList = mutableListOf<VaccineDataClass>()
-
-        // Initialize the adapter with the empty list
-        adapter = VaccineAdapter(vaccineList)
+        adapter = VaccineAdapterHistory(vaccineList) { recordId ->
+            deleteVaccine(recordId)
+        }
         recyclerView.adapter = adapter
 
-        // Call the function to fetch vaccine history
         getVaccineHistory()
     }
 
-    /**
-     * Fetches the user's vaccine history from the database and updates the UI.
-     */
     private fun getVaccineHistory() {
         val userId = UserData.getUserId()
 
@@ -61,12 +48,27 @@ class VaccineHistoryActivity : BarHandler() {
                 val userVaccineHistory = userId?.let { dbQueries.getVaccineHistory(it) }
                 connection.close()
 
-                // Update UI with the fetched vaccine history
                 withContext(Dispatchers.Main) {
                     userVaccineHistory?.let {
-                        // Clear previous data and update adapter with new data
                         adapter.setData(it)
                     }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun deleteVaccine(recordId: String) {
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val connection = DBConnection.getConnection()
+                val dbQueries = DBQueries(connection)
+                dbQueries.deleteVaccineRecord(recordId)
+                connection.close()
+
+                withContext(Dispatchers.Main) {
+                    adapter.removeItem(recordId)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

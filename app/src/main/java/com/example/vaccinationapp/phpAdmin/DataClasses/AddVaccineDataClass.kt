@@ -9,7 +9,5 @@ data class AddVaccineDataClass(
     val userId: String? = null,
     val dateOfVaccine: Date? = null,
     val timeOfVaccine: String? = null
-
-
 )
 
