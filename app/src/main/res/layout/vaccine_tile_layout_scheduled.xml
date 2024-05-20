@@ -11,24 +11,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="203dp"
+        android:layout_height="179dp"
         android:layout_gravity="center"
         android:background="@drawable/tile_background">
-
-        <TextView
-            android:id="@+id/sum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:fontFamily="@font/poppins_regular"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/last_dose_text"
-            app:layout_constraintVertical_bias="0.0"
-            tools:text="• next dose: 03/18/2024" />
 
         <TextView
             android:id="@+id/name_text"
@@ -69,13 +54,33 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
             android:fontFamily="@font/poppins_regular"
             android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/manufacturer_text"
+            app:layout_constraintVertical_bias="0.0"
             tools:text="• last dose: 03/18/2023" />
+
+        <TextView
+            android:id="@+id/appointment_time_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/poppins_regular"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/last_dose_text"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="• next dose: 03/18/2024" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

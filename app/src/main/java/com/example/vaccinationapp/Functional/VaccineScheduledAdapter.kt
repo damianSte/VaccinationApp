@@ -14,7 +14,7 @@ class VaccineScheduledAdapter(private val vaccineList: MutableList<VaccineDataCl
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VaccineViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.vaccine_tile_layout, parent, false)
+            .inflate(R.layout.vaccine_tile_layout_scheduled, parent, false)
         return VaccineViewHolder(view)
     }
 

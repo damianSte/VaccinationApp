@@ -6,9 +6,21 @@ import java.util.UUID
 fun main() {
 
 
-    getUserProfileValues()
+    val recordId = "052076e6-b23a-4a69-bfd0-d07afc940465"
 
-    println(ProfileData.getUserName())
+    try {
+        val connection = DBConnection.getConnection()
+
+        val dbQueries = DBQueries(connection)
+
+
+        dbQueries.deleteVaccineRecord(recordId)
+        connection.close()
+
+
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
 
 }
 

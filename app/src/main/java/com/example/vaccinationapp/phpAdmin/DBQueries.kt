@@ -110,7 +110,6 @@ open class DBQueries(private val connection: Connection) : DbUser {
         var userNumber: String? = null
         var userDoB: String? = null
 
-
         if (resultSet.next()) {
             userName = resultSet.getString("name")
             userPesel = resultSet.getString("pesel")
@@ -121,12 +120,7 @@ open class DBQueries(private val connection: Connection) : DbUser {
         resultSet.close()
         statement.close()
 
-        ProfileData.setUserName(userName ?: "")
-        ProfileData.setUserPesel(userPesel ?: "")
-        ProfileData.setUserNumber(userNumber ?: "")
-        ProfileData.setUserDoB(userDoB ?: "")
-
-        return UserProfileDataClass(null,userPesel,userNumber,userDoB,userName)
+        return UserProfileDataClass(null, userPesel, userNumber, userDoB, userName)
     }
 
 
@@ -178,8 +172,9 @@ open class DBQueries(private val connection: Connection) : DbUser {
                 val manufacturer = resultSet.getString("manufacturer")
                 val lastDose = resultSet.getDate("date_of_vaccine")
                 val dosage = resultSet.getInt("dosage")
+                val recordId = resultSet.getString("record_id")
 
-                val vaccine = VaccineDataClass(name, manufacturer, lastDose,null, dosage)
+                val vaccine = VaccineDataClass(name, manufacturer, lastDose,null, dosage, recordId)
                 vaccineList.add(vaccine)
 
             }
@@ -229,6 +224,19 @@ open class DBQueries(private val connection: Connection) : DbUser {
         println(vaccineList)
         return vaccineList
 
+    }
+
+    fun deleteVaccineRecord(recordId: String): Boolean {
+        return try {
+            val call = "{CALL deleteVaccineRecord(?)}"
+            val statement = connection.prepareCall(call)
+            statement.setString(1, recordId)
+            val rowsAffected = statement.executeUpdate()
+            rowsAffected > 0
+        } catch (e: SQLException) {
+            e.printStackTrace()
+            false
+        }
     }
 
     /**
